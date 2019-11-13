@@ -1,4 +1,4 @@
-function TRIMOUT = importfile(filename, startRow, endRow)
+function TRIMOUT = importTRIM(filename, startRow, endRow)
 %IMPORTFILE Import numeric data from a text file as a matrix.
 %   TRIMOUT = IMPORTFILE(FILENAME) Reads data from text file FILENAME for
 %   the default selection.
