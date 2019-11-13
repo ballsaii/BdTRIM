@@ -50,8 +50,8 @@ for block=2:length(startRow)
 end
 
 %% Remove white space around all cell columns.
-dataArray{7} = strtrim(dataArray{7});
-dataArray{9} = strtrim(dataArray{9});
+% dataArray{7} = strtrim(dataArray{7});
+% dataArray{9} = strtrim(dataArray{9});
 
 %% Close the text file.
 fclose(fileID);
