@@ -1,8 +1,8 @@
-function [outputArg1,outputArg2] = readTRIM()
+function data = readTRIM()
 % 
 % call library that get path(s)
 path=getPath;
-importTRIM(path);
+data=importTRIM(path);
 
 end
 
