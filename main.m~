@@ -1,0 +1,25 @@
+function [outputArg1,outputArg2] = main()
+%   This main function calls the 'main.fig'
+
+%   Initialize the main figure
+    main_fig = open('main.fig');
+    Mhandles = guihandles(main_fig);
+    guidata(main_fig,Mhandles)
+    
+%   Initialized call_back function to objects
+    set(Mhandles.menu_new_workspace,'Callback',{@new_workspace});
+    
+    % Intialized #object for result fig
+    current_no_workspace=1;
+    
+    function new_workspace(hObject,evendata)
+    % apply current no.workspace    
+    guidata(main_fig,current_no_workspace)
+    current_no_workspace = current_no_workspace+1;
+    
+    % call function for open resultfig
+    new_resultfig(hObject,evendata)
+    end
+    
+end
+
