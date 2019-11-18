@@ -24,6 +24,6 @@ result_fig.Name = sprintf('Workspace no %d',current_no_workspace);
         workspaceHandles(current_no_workspace).lst_load.String = [old',list];
         
         % Update alldata to dummyHandles
-        guidata(workspaceHandles(current_no_workspace),alldata)
+        workspaceHandles(current_no_workspace).data=alldata;
     end
 end
