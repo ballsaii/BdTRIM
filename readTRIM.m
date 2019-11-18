@@ -1,6 +1,6 @@
-function data = readTRIM()
+function dataout = readTRIM()
 % create data structure
-data = struct('data',[],'path',[]);
+dataout = struct('data',[],'path',[]);
 
 % call library that get path(s)
 path=getPath;
@@ -8,12 +8,12 @@ path=getPath;
 % support multi file
 if iscell(path) % multi selction case
     for i=1:length(path)
-        data(i).data=importTRIM(path{i});
-        data(i).path=path{i};
+        dataout(i).data=importTRIM(path{i});
+        dataout(i).path=path{i};
     end
 else
-    data(1)=importTRIM(path);% single
-    data(1).path=path;
+    dataout.data=importTRIM(path);% single
+    dataout.path=path;
 end
 end
 
