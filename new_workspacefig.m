@@ -1,6 +1,7 @@
 function result_fig = new_workspacefig(current_no_workspace)
 %   Initialize a new result figure theme
-result_fig = open('load.fig');
+result_fig = openfig('load.fig');
+
 %     data = guidata(result_fig);
 
 % Create a dummy GUI handle
@@ -44,7 +45,8 @@ workspaceHandles(current_no_workspace).btn_movedown.Callback = {@movedown};
             workspaceHandles(current_no_workspace).lst_load.String = old;
             ii=ii+1;
         end
-        
+        guidata(result_fig,workspaceHandles(current_no_workspace));
+
     end
 
     function moveup(hObject,eventdata)
