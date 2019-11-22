@@ -15,7 +15,7 @@ workspaceHandles(current_no_workspace).btn_openfile.Callback = {@openfile};
 
 % moveup and down
 workspaceHandles(current_no_workspace).btn_moveup.Callback = {@moveup};
-% workspaceHandles(current_no_workspace).btn_movedown.Callback = {@movedown};
+workspaceHandles(current_no_workspace).btn_movedown.Callback = {@movedown};
 
 
 
@@ -30,7 +30,7 @@ workspaceHandles(current_no_workspace).btn_moveup.Callback = {@moveup};
             last=size(get(workspaceHandles(current_no_workspace).lst_load,'String'),1);
             
         end
-       
+        
         ii=1;
         for i=last+1:last+length(alldata)
             %             data(i) = alldata(i).data;
@@ -48,7 +48,25 @@ workspaceHandles(current_no_workspace).btn_moveup.Callback = {@moveup};
     end
 
     function moveup(hObject,eventdata)
-        old = get(workspaceHandles(current_no_workspace).lst_load,'String');
+        move('up')
+    end
+
+    function movedown(hObject,eventdata)
+        move('down')
+    end
+
+    function move(direction)
+        % select to move 'up' or 'down'
+        switch direction
+            case 'up'
+                ud = -1;
+            case 'down'
+                ud = 1;
+            otherwise
+                warndlg('Error');
+                drawnow;
+                return;
+        end
         
         % target the selected value in the listbox
         selected_Value = workspaceHandles(current_no_workspace).lst_load.Value;
@@ -57,25 +75,18 @@ workspaceHandles(current_no_workspace).btn_moveup.Callback = {@moveup};
         selected_file = workspaceHandles(current_no_workspace).data(selected_Value);
         
         try
-            above_file = workspaceHandles(current_no_workspace).data(selected_Value-1);
-            workspaceHandles(current_no_workspace).data(selected_Value-1) = selected_file;
-            workspaceHandles(current_no_workspace).data(selected_Value) = above_file;
+            adjacent_file = workspaceHandles(current_no_workspace).data(selected_Value+ud);
+            workspaceHandles(current_no_workspace).data(selected_Value+ud) = selected_file;
+            workspaceHandles(current_no_workspace).data(selected_Value) = adjacent_file;
             % move file in the listbox up
-            dummy = workspaceHandles(current_no_workspace).lst_load.String(selected_Value-1);
-            workspaceHandles(current_no_workspace).lst_load.String(selected_Value-1)=workspaceHandles(current_no_workspace).lst_load.String(selected_Value);
+            dummy = workspaceHandles(current_no_workspace).lst_load.String(selected_Value+ud);
+            workspaceHandles(current_no_workspace).lst_load.String(selected_Value+ud)=workspaceHandles(current_no_workspace).lst_load.String(selected_Value);
             workspaceHandles(current_no_workspace).lst_load.String(selected_Value)=dummy;
             % follow selected cursor
-            workspaceHandles(current_no_workspace).lst_load.Value = selected_Value-1;
+            workspaceHandles(current_no_workspace).lst_load.Value = selected_Value+ud;
         catch
-            warndlg('Cannot move');
-            drawnow;
             return;
         end
-        whos
-        
-        % update alldata to dummyHandles
-        
     end
-
 
 end
