@@ -9,20 +9,31 @@ guidata(main_fig,Mhandles)
 
 %   Initialized call_back function to objects
 Mhandles.btn_workspace.Callback = {@new_workspace};
+Mhandles.btn_visualize.Callback = {@visulization};
 
 % Intialized #object for result fig
-current_no_workspace =0;
+no_workspace =0;
 
     function new_workspace(hObject,evendata,handles)
         % increase index for next workspace
-        current_no_workspace = current_no_workspace+1;
+        no_workspace = no_workspace+1;
         
         % call function for open resultfig
-        fig=new_workspacefig(current_no_workspace);
-        hfig = guihandles(fig);
+        fig(no_workspace)=new_workspacefig(no_workspace);
+        hfig = guihandles(fig(no_workspace));
         handles.workspacefig = hfig;
         guidata(hObject,handles);
+        %         add_l = addlistener(fig,'Color','PostSet',@activewindow)
+        Mhandles.figno(no_workspace) = fig(no_workspace);
     end
 
+    function visulization(hObject,evendata,handles)
+        % get active current workspace
+        
+        current_workspace = textscan(get(gcf,'Name'),'Workspace no %f');
+        whos
+%         guidata(Mhandles.figno(1))
+%         disp('ok');
+    end
 end
 
