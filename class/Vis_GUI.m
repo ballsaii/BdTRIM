@@ -10,7 +10,7 @@ classdef Vis_GUI
     methods
         function obj = Vis_GUI
             % defind figure
-            f = openfig('main.fig');
+            f = openfig('Vis_GUI.fig');
             
             % add tabgroup
             tabgp = uitabgroup(f,'Position',[.05 .25 .9 .7],...
