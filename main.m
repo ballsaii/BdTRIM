@@ -1,39 +1,25 @@
-function [outputArg1,outputArg2] = main()
+function main
 %   This main function calls the 'main.fig'
 
 %   Initialize the main figure main_fig is an object-handle while Mhandles is a
-%   handle (data)
-main_fig = open('main.fig');
-Mhandles = guihandles(main_fig);
-guidata(main_fig,Mhandles)
+a = Load_GUI;
 
 %   Initialized call_back function to objects
-Mhandles.btn_workspace.Callback = {@new_workspace};
-Mhandles.btn_visualize.Callback = {@visulization};
+a.handles.uimenu_new_workspace.Callback = @addwork;
+a.handles.uimenu_delete_workspace.Callback = @deletework;
 
-% Intialized #object for result fig
-no_workspace =0;
 
-    function new_workspace(hObject,evendata,handles)
-        % increase index for next workspace
-        no_workspace = no_workspace+1;
-        
-        % call function for open resultfig
-        fig(no_workspace)=new_workspacefig(no_workspace);
-        hfig = guihandles(fig(no_workspace));
-        handles.workspacefig = hfig;
-        guidata(hObject,handles);
-        %         add_l = addlistener(fig,'Color','PostSet',@activewindow)
-        Mhandles.figno(no_workspace) = fig(no_workspace);
+    function addwork(hObject,evendata,handles)
+        % add work tab
+        a.addwork;
     end
 
-    function visulization(hObject,evendata,handles)
-        % get active current workspace
-        
-        current_workspace = textscan(get(gcf,'Name'),'Workspace no %f');
-        whos
-%         guidata(Mhandles.figno(1))
-%         disp('ok');
+    function deletework(hObject,evendata,handles)
+        % delete current workspace
+        a.deletework
+    end
+    function moveup
+        a.handles.tabgroup_work.Children.findobj('Tag','btn_moveup')
     end
 end
 
