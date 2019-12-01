@@ -5,11 +5,22 @@ function main
 a = Load_GUI;
 
 %   Initialized call_back function to objects
+a.handles.uimenu_workspace.Callback = @refresh;
+a.handles.uimenu_load_workspace.Callback = @load;
 a.handles.uimenu_new_workspace.Callback = @addwork;
 a.handles.uimenu_delete_workspace.Callback = @deletework;
 % a.handles.tabgroup_work.Children.findobj('Tag','btn_moveup').Callback = @moveup;
 % a.handles.tabgroup_work.Children.findobj('Tag','btn_movedown').Callback = @movedown;
 
+
+    function refresh(hObject,evendata,handles)
+        % check exist workspace
+        if isempty(a.handles.tabgroup_work.Children)
+            a.handles.uimenu_load_workspace.Enable = 'off';
+        else
+            a.handles.uimenu_load_workspace.Enable = 'on';
+        end
+    end
 
     function addwork(hObject,evendata,handles)
         % add work tab
@@ -17,8 +28,26 @@ a.handles.uimenu_delete_workspace.Callback = @deletework;
         % apply function to move uicontrol
         a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_moveup').Callback = @moveup;
         a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_movedown').Callback = @movedown;
+
     end
 
+    function load(hObject,evendata,handles)
+        % add properties to selecttab
+        try a.handles.tabgroup_work.SelectedTab.addprop('data');
+        catch
+            return;
+        end
+        % call local function to read file
+        output = readTRIM;
+        a.handles.tabgroup_work.SelectedTab.data = output;
+        
+        % display in listbox
+        list = a.handles.tabgroup_work.SelectedTab.findobj('Tag','list_load');
+        list.String = output.path;
+        
+        %
+        
+    end
     function deletework(hObject,evendata,handles)
         % delete current workspace
         a.deletework
@@ -31,7 +60,6 @@ a.handles.uimenu_delete_workspace.Callback = @deletework;
     function movedown(hObject,evendata,handles)
         move('down')
     end
-
 
     function move(direction)
         % select to move 'up' or 'down'
@@ -52,13 +80,13 @@ a.handles.uimenu_delete_workspace.Callback = @deletework;
         selected_Value = list.Value;
         
         % move data
-%         selected_file = workspaceHandles(current_no_workspace).data(selected_Value);
+        %         selected_file = workspaceHandles(current_no_workspace).data(selected_Value);
         
         try
-%             adjacent_file = workspaceHandles(current_no_workspace).data(selected_Value+ud);
-%             workspaceHandles(current_no_workspace).data(selected_Value+ud) = selected_file;
-%             workspaceHandles(current_no_workspace).data(selected_Value) = adjacent_file;
-%             
+            %             adjacent_file = workspaceHandles(current_no_workspace).data(selected_Value+ud);
+            %             workspaceHandles(current_no_workspace).data(selected_Value+ud) = selected_file;
+            %             workspaceHandles(current_no_workspace).data(selected_Value) = adjacent_file;
+            %
             % move file in the listbox up
             dummy = list.String(selected_Value+ud);
             list.String(selected_Value+ud)=list.String(selected_Value);
