@@ -44,7 +44,7 @@ classdef Load_GUI
             obj.handles = guihandles(f);
         end
         
-        function addwork(obj)
+        function tab1=addwork(obj)
             
             % create gui
             tabgp = obj.handles.tabgroup_work;
