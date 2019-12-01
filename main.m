@@ -9,10 +9,9 @@ a.handles.uimenu_workspace.Callback = @refresh;
 a.handles.uimenu_load_workspace.Callback = @load;
 a.handles.uimenu_new_workspace.Callback = @addwork;
 a.handles.uimenu_delete_workspace.Callback = @deletework;
+a.handles.uimenu_analysis.Callback = @send_Vis_GUI;
 
-% a.handles.tabgroup_work.Children.findobj('Tag','btn_moveup').Callback = @moveup;
-% a.handles.tabgroup_work.Children.findobj('Tag','btn_movedown').Callback = @movedown;
-
+%   Initialize Callback to VIS_GUI
 
     function refresh(hObject,evendata,handles)
         % check exist workspace
@@ -21,18 +20,32 @@ a.handles.uimenu_delete_workspace.Callback = @deletework;
         else
             a.handles.uimenu_load_workspace.Enable = 'on';
         end
-
     end
 
     function addwork(hObject,evendata,handles)
         % add work tab
         new_tab = a.addwork;
+        
         % apply function to move uicontrol
         a.handles.tabgroup_work.SelectedTab = new_tab;
- 
+        
+        % initiate callback for buttons
         a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_moveup').Callback = @moveup;
         a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_movedown').Callback = @movedown;
+        a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_batch').Callback = @batch;
+        a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_removeitem').Callback = @removeitem;
+    end
 
+    function batch(hObject,evendata,handles)
+        list = a.handles.tabgroup_work.SelectedTab.findobj('Tag','list_load');
+        
+        if hObject.Value
+            % batch
+            set(list,'Enable','off');
+        else
+            set(list,'Enable','on');
+        end
+        
     end
 
     function load(hObject,evendata,handles)
@@ -80,6 +93,12 @@ a.handles.uimenu_delete_workspace.Callback = @deletework;
     function deletework(hObject,evendata,handles)
         % delete current workspace
         a.deletework
+    end
+
+    function removeitem(hObject,evendata,handles)
+        list = a.handles.tabgroup_work.SelectedTab.findobj('Tag','list_load');
+        current_item = list.Value;
+%         list.String(current_item) = [];
     end
 
     function moveup(hObject,evendata,handles)
@@ -132,5 +151,16 @@ a.handles.uimenu_delete_workspace.Callback = @deletework;
             return;
         end
     end
+
+    function send_Vis_GUI(hObject,evendata,handles)
+        list = a.handles.tabgroup_work.SelectedTab.findobj('Tag','list_load');
+        % check single or batch 
+        if a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_batch').Value
+            New_VIS_GUI(a.handles.tabgroup_work.SelectedTab)
+        else
+            New_VIS_GUI(a.handles.tabgroup_work.SelectedTab,list.Value)
+        end
+    end
+
 end
 
