@@ -51,7 +51,7 @@ classdef Load_GUI
             
             % num to string for name
             no = length(tabgp.Children)+1;
-            tab1 = uitab(tabgp,'Title',sprintf('Workspace %d',no));
+            tab1 = uitab(tabgp);
             
             list = uicontrol(tab1,'style','listbox',...
                 'HorizontalAlignment','left',...
@@ -96,7 +96,6 @@ classdef Load_GUI
         end
         
         function deletework(obj)
-            
             % create gui
             tabgp = obj.handles.tabgroup_work;
             

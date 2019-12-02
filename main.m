@@ -11,6 +11,8 @@ a.handles.uimenu_new_workspace.Callback = @addwork;
 a.handles.uimenu_delete_workspace.Callback = @deletework;
 a.handles.uimenu_analysis.Callback = @send_Vis_GUI;
 
+% number of tab
+no=1;
 %   Initialize Callback to VIS_GUI
 
     function refresh(hObject,evendata,handles)
@@ -26,6 +28,8 @@ a.handles.uimenu_analysis.Callback = @send_Vis_GUI;
         % add work tab
         new_tab = a.addwork;
         
+        % num to string for name
+        new_tab.Title = sprintf('Workspace %d',no);
         % apply function to move uicontrol
         a.handles.tabgroup_work.SelectedTab = new_tab;
         
@@ -34,6 +38,7 @@ a.handles.uimenu_analysis.Callback = @send_Vis_GUI;
         a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_movedown').Callback = @movedown;
         a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_batch').Callback = @batch;
         a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_removeitem').Callback = @removeitem;
+        no = no+1;
     end
 
     function batch(hObject,evendata,handles)
@@ -153,14 +158,8 @@ a.handles.uimenu_analysis.Callback = @send_Vis_GUI;
     end
 
     function send_Vis_GUI(hObject,evendata,handles)
-        list = a.handles.tabgroup_work.SelectedTab.findobj('Tag','list_load');
-        % check single or batch 
-        if a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_batch').Value
-            New_VIS_GUI(a.handles.tabgroup_work.SelectedTab)
-        else
-            New_VIS_GUI(a.handles.tabgroup_work.SelectedTab,list.Value)
-        end
+        % send to 
+        vis_plot(a.handles.tabgroup_work.SelectedTab)
     end
-
 end
 
