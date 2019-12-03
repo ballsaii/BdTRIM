@@ -39,12 +39,24 @@ end
         
         % initiate callback for buttons
         %         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','axes_plot').Callback = @axes;
-        b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_apply').Callback = @apply_plot;
+        b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_apply').Callback = @commandplot;
         no = no+1;
     end
 
     function deletework(hObject,evendata,handles)
-    b.deletework
+        b.deletework
+    end
+    
+    function commandplot(hObject,evendata,handles)
+        % set command
+        command = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String;
+        x = dataplot(1).data.x;
+        y = dataplot(1).data.y;
+        command = 'plot(x,y)';
+        try eval(command)
+        catch warndlg('Input wrong command');
+        end
+        
     end
 end
 
