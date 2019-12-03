@@ -102,8 +102,14 @@ no=1;
 
     function removeitem(hObject,evendata,handles)
         list = a.handles.tabgroup_work.SelectedTab.findobj('Tag','list_load');
-        current_item = list.Value;
-%         list.String(current_item) = [];
+        index = list.Value;
+        content = list.String;
+        content(index) = [];
+        list.String = content;
+        try list.Value =index-1;
+        catch list.Value = 1;
+        end
+        %         list.String(current_item) = [];
     end
 
     function moveup(hObject,evendata,handles)
