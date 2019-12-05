@@ -44,18 +44,29 @@ end
     function deletework(hObject,evendata,handles)
         b.deletework
     end
-    
+
     function commandplot(hObject,evendata,handles)
-        % set command
+        
+        if a.findobj('Tag','btn_batch').Value
+            % batch
+            objbeam = arrayfun(@(x) Bdis(x),dataplot);
+            index = length(objbeam);
+            
+            % call Bat_GUI
+        else
+            target_file = a.findobj('Tag','list_load').Value;
+            objbeam = Bdis(dataplot(target_file));
+            assignin('caller','x',objbeam.x);
+            assignin('caller','y',objbeam.y)
+            assignin('caller','z',objbeam.z)
+            assignin('caller','xp',objbeam.xp)
+            assignin('caller','yp',objbeam.yp)
+            assignin('caller','Ek',objbeam.Ek)
+        end
+        
+        % set variables
+%         thisaxes = a.findobj('Tag','axes_plot');
         command = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String;
-        target_file = a.findobj('Tag','list_load').Value;
-        objbeam = Bdis(dataplot(target_file));
-        assignin('caller','x',objbeam.x);
-        assignin('caller','y',objbeam.y)
-        assignin('caller','z',objbeam.z)
-        assignin('caller','xp',objbeam.xp)
-        assignin('caller','yp',objbeam.yp)
-        assignin('caller','Ek',objbeam.Ek)
         
         try evalin('caller',command)
         catch h= warndlg('Input wrong command');
