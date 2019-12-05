@@ -15,7 +15,7 @@ b.handles.uimenu_new_workspace.Callback = @addplot;
 b.handles.uimenu_delete_workspace.Callback = @deletework;
 
 no = 1;
-% auto generate tab
+% auto generate tabd
 if isempty(b.handles.tabgroup_plot.Children)
     % add auto tab
     addplot
@@ -35,8 +35,6 @@ end
         
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_path').String = path;
         
-
-        
         % initiate callback for buttons
         %         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','axes_plot').Callback = @axes;
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_apply').Callback = @commandplot;
@@ -50,11 +48,17 @@ end
     function commandplot(hObject,evendata,handles)
         % set command
         command = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String;
-        x = dataplot(1).data.x;
-        y = dataplot(1).data.y;
-        command = 'plot(x,y)';
-        try eval(command)
-        catch warndlg('Input wrong command');
+        target_file = a.findobj('Tag','list_load').Value;
+        objbeam = Bdis(dataplot(target_file));
+        assignin('caller','x',objbeam.x);
+        assignin('caller','y',objbeam.y)
+        assignin('caller','z',objbeam.z)
+        assignin('caller','xp',objbeam.xp)
+        assignin('caller','yp',objbeam.yp)
+        assignin('caller','Ek',objbeam.Ek)
+        
+        try evalin('caller',command)
+        catch h= warndlg('Input wrong command');
         end
         
     end
