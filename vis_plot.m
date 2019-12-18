@@ -38,6 +38,10 @@ end
         % initiate callback for buttons
         %         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','axes_plot').Callback = @axes;
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_apply').Callback = @commandplot;
+        b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_save').Callback = @save_command;
+        b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_load').Callback = @load_command;
+        
+        % increase one for next
         no = no+1;
     end
 
@@ -72,6 +76,24 @@ end
         catch h= warndlg('Input wrong command');
         end
         
+    end
+
+    function save_command(hObject,evendata,handles)
+        % uiputfile
+        [file,path] = uiputfile('.txt','Save Command','saved_command');
+        command = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String;
+        fid = fopen(fullfile(path,file),'w');
+        fprintf(fid,command);
+        fclose(fid);
+    end
+
+    function load_command(hObject,evendata,handles)
+        % uigetfile
+        [file,path] = uigetfile('.txt','Load Command','saved_command');
+        fid = fopen(fullfile(path,file),'r');
+        command = textscan(fid,'%s','TextType','string');
+        b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String = command{1};
+        fclose(fid);        
     end
 end
 
