@@ -18,7 +18,7 @@ classdef Vis_GUI
                 'Tag','vis_gui');
             
             % add workspace uimenu
-            menu_new = uimenu(f,'Text','Plot',...
+            menu_new = uimenu(f,'Text','Tab',...
                 'Tag','uimenu_plot');
             
             % add new uimenu

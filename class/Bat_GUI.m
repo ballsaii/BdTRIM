@@ -16,7 +16,7 @@ classdef Bat_GUI
                 'Tag','vis_gui');
             
             % add workspace uimenu
-            menu_new = uimenu(f,'Text','WorkTab',...
+            menu_new = uimenu(f,'Text','Tab',...
                 'Tag','uimenu_plot');
             
             % add new uimenu
@@ -30,7 +30,7 @@ classdef Bat_GUI
             % add tabgroup
             tabgp = uitabgroup(f,'Position',[.05 .05 .90 .90],...
                 'TabLocation','top',...
-                'Tag','tabgroup_plot');
+                'Tag','tabgroup_batch');
             
             % update property
             obj.handles = guihandles(f);
@@ -39,7 +39,7 @@ classdef Bat_GUI
         function tab1=addplot(obj)
             
             % create a tab
-            tab1 = uitab(obj.handles.tabgroup_plot,'Title','New');
+            tab1 = uitab(obj.handles.tabgroup_batch,'Title','New');
             
             % add an axes on tab
             table1 = uitable(tab1,'Units','normalized',...
@@ -58,6 +58,17 @@ classdef Bat_GUI
                 'Max',4,...
                 'Backgroundcolor','w',...
                 'Tag','txt_command',...
+                'Enable','on');
+            
+            % add plot from table
+            apply_command = uicontrol('style','pushButton',...
+                'String','To Plot',...,
+                'HorizontalAlignment','center',...
+                'Parent',tab1,...
+                'Units','normalized',...
+                'Position',[0.88 0.55 0.10 0.05],...
+                'Max',4,...
+                'Tag','btn_toplot',...
                 'Enable','on');
             
             % add apply_command plot
@@ -107,7 +118,7 @@ classdef Bat_GUI
         
         function deletework(obj)
             % create gui
-            tabgp = obj.handles.tabgroup_plot;
+            tabgp = obj.handles.tabgroup_batch;
             
             % check selected tab
             tabgp.SelectedTab.Parent=[];

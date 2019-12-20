@@ -26,7 +26,7 @@ end
         % add work tab
         new_tab = b.addplot;
         
-        new_tab.Title = sprintf('WorkTab %d',no);
+        new_tab.Title = sprintf('WorkPlot %d',no);
         
         path = string(a.findobj('Tag','list_load').String(a.findobj('Tag','list_load').Value));
         
