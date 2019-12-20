@@ -165,7 +165,12 @@ no=1;
 
     function send_Vis_GUI(hObject,evendata,handles)
         % send to 
-        vis_plot(a.handles.tabgroup_work.SelectedTab)
+        batch_button = a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_batch');
+        if batch_button.Value
+            batch_stat(a.handles.tabgroup_work.SelectedTab)
+        else
+            vis_plot(a.handles.tabgroup_work.SelectedTab)
+        end
     end
 end
 

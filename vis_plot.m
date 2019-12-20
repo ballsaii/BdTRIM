@@ -26,7 +26,7 @@ end
         % add work tab
         new_tab = b.addplot;
         
-        new_tab.Title = sprintf('Workspace %d',no);
+        new_tab.Title = sprintf('WorkTab %d',no);
         
         path = string(a.findobj('Tag','list_load').String(a.findobj('Tag','list_load').Value));
         
@@ -35,9 +35,8 @@ end
         
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_path').String = path;
         
-        % initiate callback for buttons
-        %         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','axes_plot').Callback = @axes;
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_apply').Callback = @commandplot;
+
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_save').Callback = @save_command;
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_load').Callback = @load_command;
         
@@ -51,22 +50,14 @@ end
 
     function commandplot(hObject,evendata,handles)
         
-        if a.findobj('Tag','btn_batch').Value
-            % batch
-            objbeam = arrayfun(@(x) Bdis(x),dataplot);
-            index = length(objbeam);
-            
-            % call Bat_GUI
-        else
-            target_file = a.findobj('Tag','list_load').Value;
-            objbeam = Bdis(dataplot(target_file));
-            assignin('caller','x',objbeam.x);
-            assignin('caller','y',objbeam.y)
-            assignin('caller','z',objbeam.z)
-            assignin('caller','xp',objbeam.xp)
-            assignin('caller','yp',objbeam.yp)
-            assignin('caller','Ek',objbeam.Ek)
-        end
+        target_file = a.findobj('Tag','list_load').Value;
+        objbeam = Bdis(dataplot(target_file));
+        assignin('caller','x',objbeam.x);
+        assignin('caller','y',objbeam.y)
+        assignin('caller','z',objbeam.z)
+        assignin('caller','xp',objbeam.xp)
+        assignin('caller','yp',objbeam.yp)
+        assignin('caller','Ek',objbeam.Ek)
         
         % set variables
 %         thisaxes = a.findobj('Tag','axes_plot');
