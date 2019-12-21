@@ -36,7 +36,7 @@ end
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_path').String = path;
         
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_apply').Callback = @commandplot;
-
+        
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_save').Callback = @save_command;
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_load').Callback = @load_command;
         
@@ -49,23 +49,73 @@ end
     end
 
     function commandplot(hObject,evendata,handles)
-        
+
+
         target_file = a.findobj('Tag','list_load').Value;
+        
+        % condition
+        condition = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_condition').String;
+        
+        % read data
         objbeam = Bdis(dataplot(target_file));
-        assignin('caller','x',objbeam.x);
-        assignin('caller','y',objbeam.y)
-        assignin('caller','z',objbeam.z)
-        assignin('caller','xp',objbeam.xp)
-        assignin('caller','yp',objbeam.yp)
-        assignin('caller','Ek',objbeam.Ek)
         
-        % set variables
-%         thisaxes = a.findobj('Tag','axes_plot');
+        x = objbeam.x;
+        y= objbeam.y;
+        z= objbeam.z;
+        xp = objbeam.xp;
+        yp = objbeam.yp;
+        Ek = objbeam.Ek;
+        
+        if ~isempty(condition)
+            % apply condition
+            x1 = objbeam.x(eval(condition));
+            y1 = objbeam.y(eval(condition));
+            z1 = objbeam.z(eval(condition));
+            xp1 = objbeam.xp(eval(condition));
+            yp1 = objbeam.yp(eval(condition));
+            Ek1 = objbeam.Ek(eval(condition));
+            
+            % assign data
+            assignin('caller','x',x1);
+            assignin('caller','y',y1);
+            assignin('caller','z',z1);
+            assignin('caller','xp',xp1);
+            assignin('caller','yp',yp1);
+            assignin('caller','Ek',Ek1);
+              
+        else
+            % no condition           
+            x1 = objbeam.x(:);
+            y1 = objbeam.y(:);
+            z1 = objbeam.z(:);
+            xp1 = objbeam.xp(:);
+            yp1 = objbeam.yp(:);
+            Ek1 = objbeam.Ek(:);
+            
+            % assign data
+            assignin('caller','x',x1);
+            assignin('caller','y',y1);
+            assignin('caller','z',z1);
+            assignin('caller','xp',xp1);
+            assignin('caller','yp',yp1);
+            assignin('caller','Ek',Ek1);
+            
+        end
+        % set command
         command = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String;
-        
-        try evalin('caller',command)
+
+        % active current axes
+        axes(b.handles.tabgroup_plot.SelectedTab.findobj('Type','Axes'));
+
+
+        try obj_command = evalin('caller',command);
         catch h= warndlg('Input wrong command');
         end
+        
+        whos
+%         try eval(command)
+%         catch h= warndlg('Input wrong command');
+%         end
         
     end
 
@@ -73,8 +123,10 @@ end
         % uiputfile
         [file,path] = uiputfile('.txt','Save Command','saved_command');
         command = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String;
+        cond = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_condition').String;
+        save_command = sprintf('conditon:%s\ncommand:%s',cond,command);
         fid = fopen(fullfile(path,file),'w');
-        fprintf(fid,command);
+        fprintf(fid,save_command);
         fclose(fid);
     end
 
@@ -82,9 +134,10 @@ end
         % uigetfile
         [file,path] = uigetfile('.txt','Load Command','saved_command');
         fid = fopen(fullfile(path,file),'r');
-        command = textscan(fid,'%s','TextType','string');
-        b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String = command{1};
-        fclose(fid);        
+        command = textscan(fid,'conditon:%s\ncommand:%s','TextType','string');
+        b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_condition').String = command{1};
+        b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String = command{2};
+        fclose(fid);
     end
 end
 
