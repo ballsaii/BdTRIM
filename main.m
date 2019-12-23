@@ -70,8 +70,6 @@ no=1;
         % listbox define
         list = a.handles.tabgroup_work.SelectedTab.findobj('Tag','list_load');
         
-
-        
         %check existing data, number of data
         if isempty(get(list,'String'))
             last = 0;
@@ -79,6 +77,7 @@ no=1;
             last=size(get(list,'String'),1);
         end
         
+        % add multiple files
         ii=1;
         for i=last+1:last+length(alldata)
             % record alldata to data structure
