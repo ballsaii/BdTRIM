@@ -14,6 +14,7 @@ dataplot = struct(a.data);
 % initialize uimenu
 b.handles.uimenu_new_workspace.Callback = @addplot;
 b.handles.uimenu_delete_workspace.Callback = @deletework;
+b.handles.uimenu_goplot.Callback = @goplot;
 
 no = 1;
 
@@ -41,7 +42,6 @@ end
         
         b.handles.tabgroup_batch.SelectedTab.findobj('Tag','txt_save').Callback = @save_command;
         b.handles.tabgroup_batch.SelectedTab.findobj('Tag','txt_load').Callback = @load_command;
-        b.handles.tabgroup_batch.SelectedTab.findobj('Tag','btn_toplot').Callback = @btn_toplot;
         
         % increase one for next
         no = no+1;
@@ -91,7 +91,7 @@ end
         fclose(fid);
     end
 
-    function btn_toplot(hObject,evendata,handles)
+    function goplot(hObject,evendata,handles)
         toplot(b.handles.tabgroup_batch.SelectedTab);
     end
 

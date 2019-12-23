@@ -46,7 +46,19 @@ end
         % convert cell to array
         data = c.data';
         all = cell2mat(data);
+        [num_row,num_col]=size(all);
         assignin('caller','all',all);
+        
+        % assign variables to workspace
+        for i=1:num_row
+            for j=1:num_col
+                evalin('caller',(sprintf('y%d = all(:,%d)',i,i)));
+                evalin('caller',(sprintf('x%d = all(%d,:)',j,j)));
+                
+            end
+        end
+        
+
         command = d.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String;
         
         try evalin('caller',command)

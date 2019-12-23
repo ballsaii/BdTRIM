@@ -31,9 +31,14 @@ classdef Load_GUI
             menu_load_workspace = uimenu(menu_new,'Text','Load...',...
                 'Tag','uimenu_load_workspace','Enable','off');
             
+            % add new uimenu
+            menu_load_workspace_SRIM = uimenu(menu_load_workspace,'Text','SRIM',...
+                'Tag','uimenu_load_workspace_SRIM','Enable','on');            
+            
+            
             % add delete uimenu
             menu_delete_workspace = uimenu(menu_new,'Text','Delete',...
-                'Tag','uimenu_delete_workspace');
+                'Tag','uimenu_delete_workspace','Enable','off');
             
             % add tab group
             tabgp = uitabgroup(f,'Position',[.05 .05 .9 .9],...

@@ -6,7 +6,7 @@ a = Load_GUI;
 
 %   Initialized call_back function to objects
 a.handles.uimenu_workspace.Callback = @refresh;
-a.handles.uimenu_load_workspace.Callback = @load;
+a.handles.uimenu_load_workspace_SRIM.Callback = @loadSRIM;
 a.handles.uimenu_new_workspace.Callback = @addwork;
 a.handles.uimenu_delete_workspace.Callback = @deletework;
 a.handles.uimenu_analysis.Callback = @send_Vis_GUI;
@@ -19,8 +19,10 @@ no=1;
         % check exist workspace
         if isempty(a.handles.tabgroup_work.Children)
             a.handles.uimenu_load_workspace.Enable = 'off';
+            a.handles.uimenu_delete_workspace.Enable = 'off';
         else
             a.handles.uimenu_load_workspace.Enable = 'on';
+            a.handles.uimenu_delete_workspace.Enable = 'on';
         end
     end
 
@@ -53,7 +55,7 @@ no=1;
         
     end
 
-    function load(hObject,evendata,handles)
+    function loadSRIM(hObject,evendata,handles)
         % call local function to read file
         alldata = readTRIM;
         drawnow;
