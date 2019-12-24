@@ -87,7 +87,7 @@ no=1;
             
             % write file to listbox
             old = list.String;
-            new = data_array(i).path;
+            new = data_array(ii).path;
             old{end+1}=new;
             
             % update to listbox

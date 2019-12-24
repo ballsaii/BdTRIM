@@ -9,7 +9,7 @@ b = Bat_GUI;
 b.handles.vis_gui.Name = 'Batch Statistic';
 
 % create a working structor by a.data
-dataplot = struct(a.data);
+objbeam = a.data;
 
 % initialize uimenu
 b.handles.uimenu_new_workspace.Callback = @addplot;
@@ -52,7 +52,7 @@ end
     end
 
     function commandbatch (hObject,evendata,handles)
-        objbeam = arrayfun(@(x) Bdis(x),dataplot);      
+           
         command = b.handles.tabgroup_batch.SelectedTab.findobj('Tag','txt_command').String;
         sendcommand = sprintf('arrayfun(@(all) %s, objbeam,''uni'',0)',command);
         
@@ -67,7 +67,7 @@ end
         table1.Data = show_result;
         
         try b.handles.tabgroup_batch.SelectedTab.addprop('data');
-            b.handles.tabgroup_batch.SelectedTab.data = results;
+            b.handles.tabgroup_batch.SelectedTab.data = show_result;
         catch
             
         end
