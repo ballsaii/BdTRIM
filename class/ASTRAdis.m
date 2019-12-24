@@ -1,10 +1,10 @@
-classdef Astra
+classdef ASTRAdis
     properties
         data
         unit
     end
     methods
-        function obj = Astra(astradist)
+        function obj = ASTRAdis(astradist)
             
             obj.data.x = astradist.data(:,1);
             obj.unit.x = 'm';
