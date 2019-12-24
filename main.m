@@ -57,12 +57,14 @@ no=1;
 
     function loadSRIM(hObject,evendata,handles)
         % call local function to read file
-        alldata = readTRIM;
-        drawnow;
+        data_array = importSRIM(getPath);
+        
+        % convert data_array.data to SRIMobj
+        SRIMobj = arrayfun(@(dis) SRIMdis(dis),data_array);
         
         % add properties to selecttab
         try a.handles.tabgroup_work.SelectedTab.addprop('data');
-            a.handles.tabgroup_work.SelectedTab.data = struct(alldata);
+            a.handles.tabgroup_work.SelectedTab.data = SRIMobj;
         catch
             
         end
@@ -79,13 +81,13 @@ no=1;
         
         % add multiple files
         ii=1;
-        for i=last+1:last+length(alldata)
+        for i=last+1:last+length(SRIMobj)
             % record alldata to data structure
-            a.handles.tabgroup_work.SelectedTab.data(i)=alldata(ii);
+            a.handles.tabgroup_work.SelectedTab.data(i)=SRIMobj(ii);
             
             % write file to listbox
             old = list.String;
-            new = a.handles.tabgroup_work.SelectedTab.data(i).path;
+            new = data_array(i).path;
             old{end+1}=new;
             
             % update to listbox
