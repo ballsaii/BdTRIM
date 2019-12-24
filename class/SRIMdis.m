@@ -18,15 +18,9 @@ classdef SRIMdis
             % z is longitudinal path
             
             % unit of Angstrom
-            try
-                obj.x = str2double(data_array.data{7});
-                obj.y = str2double(data_array.data{6});
-                obj.z = str2double(data_array.data{5});
-            catch
                 obj.x = data_array.data{7};
                 obj.y = data_array.data{6};
                 obj.z =  data_array.data{5};
-            end
             
             obj.unit.x = 'A';
             obj.unit.y = 'A';
@@ -39,15 +33,15 @@ classdef SRIMdis
             
             % unit of 1
             
-            obj.xp = str2double(data_array.data{10})./str2double(data_array.data{8});
-            obj.yp = str2double(data_array.data{9})./str2double(data_array.data{8});
+            obj.xp = data_array.data{10}./data_array.data{8};
+            obj.yp = data_array.data{9}./data_array.data{8};
             
             obj.unit.xp = '1';
             obj.unit.yp = '1';
             
             % energy
             % unit of keV
-            obj.Ek = str2double(data_array.data{4});
+            obj.Ek = data_array.data{4};
             obj.unit.Ek = 'keV';
             
         end

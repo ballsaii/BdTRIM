@@ -3,7 +3,7 @@ function dataout = importSRIM(filename)
 dataout = struct('data',[],'path',[]);
 
 % import SRIM
-formatSpec = '%1s%5s%3s%13s%14s%11s%11s%11s%10s%s%[^\n\r]';
+formatSpec = '%1s%5f%3f%13f%14f%11f%11f%11f%10f%f%[^\n\r]';
 
 % Open the text file.
 if iscell(filename)

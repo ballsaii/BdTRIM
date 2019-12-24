@@ -8,7 +8,7 @@ b = Vis_GUI;
 b.handles.vis_gui.Name = a.Title;
 
 % create a working structor by a.data
-dataplot = struct(a.data);
+objbeam = a.data;
 
 % initialize uimenu
 b.handles.uimenu_new_workspace.Callback = @addplot;
@@ -52,28 +52,25 @@ end
 
 
         target_file = a.findobj('Tag','list_load').Value;
-        
+        current_objbeam = objbeam(target_file);
         % condition
         condition = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_condition').String;
         
-        % read data
-        objbeam = Bdis(dataplot(target_file));
-        
-        x = objbeam.x;
-        y= objbeam.y;
-        z= objbeam.z;
-        xp = objbeam.xp;
-        yp = objbeam.yp;
-        Ek = objbeam.Ek;
+        x = current_objbeam.x;
+        y= current_objbeam.y;
+        z= current_objbeam.z;
+        xp = current_objbeam.xp;
+        yp = current_objbeam.yp;
+        Ek = current_objbeam.Ek;
         
         if ~isempty(condition)
             % apply condition
-            x1 = objbeam.x(eval(condition));
-            y1 = objbeam.y(eval(condition));
-            z1 = objbeam.z(eval(condition));
-            xp1 = objbeam.xp(eval(condition));
-            yp1 = objbeam.yp(eval(condition));
-            Ek1 = objbeam.Ek(eval(condition));
+            x1 = current_objbeam.x(eval(condition));
+            y1 = current_objbeam.y(eval(condition));
+            z1 = current_objbeam.z(eval(condition));
+            xp1 = current_objbeam.xp(eval(condition));
+            yp1 = current_objbeam.yp(eval(condition));
+            Ek1 = current_objbeam.Ek(eval(condition));
             
             % assign data
             assignin('caller','x',x1);
@@ -85,12 +82,12 @@ end
               
         else
             % no condition           
-            x1 = objbeam.x(:);
-            y1 = objbeam.y(:);
-            z1 = objbeam.z(:);
-            xp1 = objbeam.xp(:);
-            yp1 = objbeam.yp(:);
-            Ek1 = objbeam.Ek(:);
+            x1 = current_objbeam.x(:);
+            y1 = current_objbeam.y(:);
+            z1 = current_objbeam.z(:);
+            xp1 = current_objbeam.xp(:);
+            yp1 = current_objbeam.yp(:);
+            Ek1 = current_objbeam.Ek(:);
             
             % assign data
             assignin('caller','x',x1);
