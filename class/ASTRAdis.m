@@ -1,51 +1,81 @@
 classdef ASTRAdis
     properties
-        data
+        x
+        y
+        z
+        px
+        py
+        pz
+        xp
+        yp
+        Ek
+        charge
+        time
+        time2
+        index
+        flag
         unit
     end
     methods
         function obj = ASTRAdis(astradist)
             
-            obj.data.x = astradist.data(:,1);
+            % filter active particles
+            flag = astradist(:,10);
+            data = astradist(find(flag>=0),:);
+
+            % relative z,pz,time to absolute value
+            z_ref = astradist(1,3);
+            pz_ref = astradist(1,6);
+            time_ref = astradist(1,7);
+            
+            % summary
+            z = [z_ref;z_ref+data(2:end,3)];
+            pz = [pz_ref;pz_ref+data(2:end,6)];
+            time = [time_ref;time_ref+data(2:end,7)]; % relative time
+            x = data(:,1);
+            y = data(:,2);
+            px = data(:,4);
+            py = data(:,5);
+            charge = data(:,8);
+            index = data(:,9);
+ 
+            % assign to obj
+            obj.x = x;
             obj.unit.x = 'm';
-            obj.data.y = astradist.data(:,2);
+            obj.y = y;
             obj.unit.y = 'm';
-            obj.data.z = astradist.data(:,3);
+            obj.z = z;
             obj.unit.z = 'm';
-            obj.data.px = astradist.data(:,4);
+            obj.px = px;
             obj.unit.px = 'eV/c';
-            obj.data.py = astradist.data(:,5);
+            obj.py = py;
             obj.unit.py = 'eV/c';
-            obj.data.pz = astradist.data(:,6);
+            obj.pz = pz;
             obj.unit.pz = 'eV/c';
-            obj.data.time = astradist.data(:,7);
+            obj.time = time;
             obj.unit.time = 'ns';
-            obj.data.charge = astradist.data(:,8);
+            obj.charge = charge;
             obj.unit.charge = 'nC';
-            obj.data.index = astradist.data(:,9);
+            obj.index = index;
             obj.unit.index = '1';
-            obj.data.flag = astradist.data(:,10);
+            obj.flag = flag;
             obj.unit.flag = '1';
+            
             % calculate time2
-            ptotal = sqrt(obj.data.px.^2+obj.data.py.^2+obj.data.pz.^2);
+            ptotal = sqrt(px.^2+py.^2+pz.^2);
             Ek = p2E(ptotal);
             g=p2gamma(E2p(Ek));
             betaz=sqrt(1-1./(g.^2));
-            obj.data.time2 = (obj.data.time(1)-((obj.data.z-obj.data.z(1))./(betaz*2.99792458E-1)));
+            obj.time2 = (time(1)-((z-z(1))./(betaz*2.99792458E-1)));
             obj.unit.time2 = 'ns';
-            obj.data.Ek = Ek;
+            obj.Ek = Ek;
             obj.unit.Ek = 'MeV';
-            xp = atan(obj.data.px./ptotal); % unit in rad
-            yp = atan(obj.data.py./ptotal);
-            obj.data.xp = xp;
+            xp = atan(px./ptotal); % unit in rad
+            yp = atan(py./ptotal);
+            obj.xp = xp;
             obj.unit.xp = 'rad';
-            obj.data.yp = yp;
+            obj.yp = yp;
             obj.unit.yp = 'rad';
-            
-            % short var for condition
-            pz = obj.data.pz;
-            time2 = obj.data.time2*1000; % unit in ps
-            time = obj.data.time*1000;
             
             end
         end

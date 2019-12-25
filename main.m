@@ -7,6 +7,7 @@ a = Load_GUI;
 %   Initialized call_back function to objects
 a.handles.uimenu_workspace.Callback = @refresh;
 a.handles.uimenu_load_workspace_SRIM.Callback = @loadSRIM;
+a.handles.uimenu_load_workspace_ASTRA.Callback = @loadASTRA;
 a.handles.uimenu_new_workspace.Callback = @addwork;
 a.handles.uimenu_delete_workspace.Callback = @deletework;
 a.handles.uimenu_analysis.Callback = @send_Vis_GUI;
@@ -56,6 +57,7 @@ no=1;
     end
 
     function loadSRIM(hObject,evendata,handles)
+        
         % call local function to read file
         data_array = importSRIM(getPath);
         
@@ -68,7 +70,28 @@ no=1;
         catch
             
         end
-         
+        loaddis(data_array,SRIMobj);
+    end
+
+    function loadASTRA(hObject,evendata,handles)
+        
+        % call local function to read file
+        data_array = importAstra(getPath);
+        
+        % convert data_array.data to SRIMobj
+        ASTRAobj = arrayfun(@(dis) ASTRAdis(dis.data),data_array);
+        
+        % add properties to selecttab
+        try a.handles.tabgroup_work.SelectedTab.addprop('data');
+            a.handles.tabgroup_work.SelectedTab.data = ASTRAobj;
+        catch
+            
+        end
+        loaddis(data_array,ASTRAobj);
+    end
+
+    function loaddis(data_array,obj)
+        
         % listbox define
         list = a.handles.tabgroup_work.SelectedTab.findobj('Tag','list_load');
         
@@ -81,9 +104,9 @@ no=1;
         
         % add multiple files
         ii=1;
-        for i=last+1:last+length(SRIMobj)
+        for i=last+1:last+length(obj)
             % record alldata to data structure
-            a.handles.tabgroup_work.SelectedTab.data(i)=SRIMobj(ii);
+            a.handles.tabgroup_work.SelectedTab.data(i)=obj(ii);
             
             % write file to listbox
             old = list.String;

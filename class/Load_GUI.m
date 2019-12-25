@@ -35,6 +35,9 @@ classdef Load_GUI
             menu_load_workspace_SRIM = uimenu(menu_load_workspace,'Text','SRIM',...
                 'Tag','uimenu_load_workspace_SRIM','Enable','on');            
             
+            % add new uimenu
+            menu_load_workspace_ASTRA = uimenu(menu_load_workspace,'Text','ATSRA',...
+                'Tag','uimenu_load_workspace_ASTRA','Enable','on');               
             
             % add delete uimenu
             menu_delete_workspace = uimenu(menu_new,'Text','Delete',...
