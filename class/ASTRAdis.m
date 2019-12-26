@@ -54,20 +54,11 @@ classdef ASTRAdis
             obj.unit.pz = 'eV/c';
             obj.time = time;
             obj.unit.time = 'ns';
-            obj.charge = charge;
-            obj.unit.charge = 'nC';
-            obj.index = index;
-            obj.unit.index = '1';
-            obj.flag = flag;
-            obj.unit.flag = '1';
+
             
             % calculate time2
             ptotal = sqrt(px.^2+py.^2+pz.^2);
             Ek = p2E(ptotal);
-            g=p2gamma(E2p(Ek));
-            betaz=sqrt(1-1./(g.^2));
-            obj.time2 = (time(1)-((z-z(1))./(betaz*2.99792458E-1)));
-            obj.unit.time2 = 'ns';
             obj.Ek = Ek;
             obj.unit.Ek = 'MeV';
             xp = atan(px./ptotal); % unit in rad
@@ -76,6 +67,16 @@ classdef ASTRAdis
             obj.unit.xp = 'rad';
             obj.yp = yp;
             obj.unit.yp = 'rad';
+            obj.charge = charge;
+            obj.unit.charge = 'nC';
+            obj.index = index;
+            obj.unit.index = '1';
+            obj.flag = flag;
+            obj.unit.flag = '1';
+            g=p2gamma(E2p(Ek));
+            betaz=sqrt(1-1./(g.^2));
+            obj.time2 = (time(1)-((z-z(1))./(betaz*2.99792458E-1)));
+            obj.unit.time2 = 'ns';
             
             end
         end

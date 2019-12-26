@@ -21,9 +21,11 @@ no=1;
         if isempty(a.handles.tabgroup_work.Children)
             a.handles.uimenu_load_workspace.Enable = 'off';
             a.handles.uimenu_delete_workspace.Enable = 'off';
+            a.handles.uimenu_analysis.Enable = 'off';
         else
             a.handles.uimenu_load_workspace.Enable = 'on';
             a.handles.uimenu_delete_workspace.Enable = 'on';
+            a.handles.uimenu_analysis.Enable = 'on';
         end
     end
 
@@ -62,15 +64,19 @@ no=1;
         data_array = importSRIM(getPath);
         
         % convert data_array.data to SRIMobj
-        SRIMobj = arrayfun(@(dis) SRIMdis(dis),data_array);
+        SRIMobj = arrayfun(@(dis) SRIMdis(dis.data),data_array);
         
         % add properties to selecttab
-        try a.handles.tabgroup_work.SelectedTab.addprop('data');
-            a.handles.tabgroup_work.SelectedTab.data = SRIMobj;
+        try
+            a.handles.tabgroup_work.SelectedTab.addprop('data');
         catch
-            
         end
+        a.handles.tabgroup_work.SelectedTab.data = SRIMobj;
+        
         loaddis(data_array,SRIMobj);
+        
+        % add SRIM_Workspace
+        %         a.handles.tabgroup_work.SelectedTab.Title = strcat('SRIM_',a.handles.tabgroup_work.SelectedTab.Title);
     end
 
     function loadASTRA(hObject,evendata,handles)
@@ -82,12 +88,16 @@ no=1;
         ASTRAobj = arrayfun(@(dis) ASTRAdis(dis.data),data_array);
         
         % add properties to selecttab
-        try a.handles.tabgroup_work.SelectedTab.addprop('data');
-            a.handles.tabgroup_work.SelectedTab.data = ASTRAobj;
+        try
+            a.handles.tabgroup_work.SelectedTab.addprop('data');
         catch
-            
         end
+        a.handles.tabgroup_work.SelectedTab.data = ASTRAobj;
+        
         loaddis(data_array,ASTRAobj);
+        
+        % add SRIM_Workspace
+        %         a.handles.tabgroup_work.SelectedTab.Title = strcat('ASTRA_',a.handles.tabgroup_work.SelectedTab.Title);
     end
 
     function loaddis(data_array,obj)
@@ -106,8 +116,12 @@ no=1;
         ii=1;
         for i=last+1:last+length(obj)
             % record alldata to data structure
-            a.handles.tabgroup_work.SelectedTab.data(i)=obj(ii);
-            
+            try
+                a.handles.tabgroup_work.SelectedTab.data(i)=obj(ii);
+            catch
+                warndlg('Please load same distibution in a workspace');
+                return;
+            end
             % write file to listbox
             old = list.String;
             new = data_array(ii).path;
@@ -118,7 +132,9 @@ no=1;
             
             % increment
             ii=ii+1;
-        end        
+        end
+        % active last item
+        list.Value = numel(list.String);
     end
 
     function deletework(hObject,evendata,handles)
@@ -190,7 +206,7 @@ no=1;
     end
 
     function send_Vis_GUI(hObject,evendata,handles)
-        % send to 
+        % send to
         batch_button = a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_batch');
         if batch_button.Value
             batch_stat(a.handles.tabgroup_work.SelectedTab)

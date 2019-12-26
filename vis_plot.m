@@ -1,5 +1,12 @@
-function [outputArg1,outputArg2] = vis_plot(a)
+function vis_plot(a)
 % a is selectedTab object
+
+try
+    % create a working structor by a.data
+    objbeam = a.data;
+catch
+    return;
+end
 
 % creat new Vis_GUI
 b = Vis_GUI;
@@ -7,8 +14,7 @@ b = Vis_GUI;
 % set figure name by Tab title
 b.handles.vis_gui.Name = a.Title;
 
-% create a working structor by a.data
-objbeam = a.data;
+
 
 % initialize uimenu
 b.handles.uimenu_new_workspace.Callback = @addplot;
@@ -50,8 +56,8 @@ end
     end
 
     function commandplot(hObject,evendata,handles)
-
-
+        
+        
         target_file = a.findobj('Tag','list_load').Value;
         current_objbeam = objbeam(target_file);
         % condition
@@ -80,9 +86,9 @@ end
             assignin('caller','xp',xp1);
             assignin('caller','yp',yp1);
             assignin('caller','Ek',Ek1);
-              
+            
         else
-            % no condition           
+            % no condition
             x1 = current_objbeam.x(:);
             y1 = current_objbeam.y(:);
             z1 = current_objbeam.z(:);
@@ -101,19 +107,19 @@ end
         end
         % set command
         command = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String;
-
+        
         % active current axes
         axes(b.handles.tabgroup_plot.SelectedTab.findobj('Type','Axes'));
-
-
+        
+        
         try obj_command = evalin('caller',command);
         catch h= warndlg('Input wrong command');
         end
         
         whos
-%         try eval(command)
-%         catch h= warndlg('Input wrong command');
-%         end
+        %         try eval(command)
+        %         catch h= warndlg('Input wrong command');
+        %         end
         
     end
 
@@ -137,12 +143,12 @@ end
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String = command{2};
         fclose(fid);
     end
-    
+
     function unitconvertor(hObject,evendata,handles)
         % load current units to GUI
         target_file = a.findobj('Tag','list_load').Value;
         b.unit_conversion(objbeam(target_file));
-%         setunit(objbeam,f)
+        %         setunit(objbeam,f)
     end
 end
 
