@@ -13,6 +13,7 @@ objbeam = a.data;
 % initialize uimenu
 b.handles.uimenu_new_workspace.Callback = @addplot;
 b.handles.uimenu_delete_workspace.Callback = @deletework;
+b.handles.uimenu_unit_setting.Callback = @unitconvertor;
 
 no = 1;
 % auto generate tabd
@@ -135,6 +136,13 @@ end
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_condition').String = command{1};
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String = command{2};
         fclose(fid);
+    end
+    
+    function unitconvertor(hObject,evendata,handles)
+        % load current units to GUI
+        target_file = a.findobj('Tag','list_load').Value;
+        b.unit_conversion(objbeam(target_file));
+%         setunit(objbeam,f)
     end
 end
 
