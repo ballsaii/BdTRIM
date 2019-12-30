@@ -147,8 +147,11 @@ end
     function unitconvertor(hObject,evendata,handles)
         % load current units to GUI
         target_file = a.findobj('Tag','list_load').Value;
-        b.unit_conversion(objbeam(target_file));
-        %         setunit(objbeam,f)
+        
+        % open GUI for unit setting returning figure
+        unit_fig = b.unit_conversion(objbeam(target_file));
+
+        % setunit(objbeam,f)
     end
 end
 
