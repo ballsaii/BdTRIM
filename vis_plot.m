@@ -150,8 +150,17 @@ end
         
         % open GUI for unit setting returning figure
         unit_fig = b.unit_conversion(objbeam(target_file));
-
-        % setunit(objbeam,f)
+        unit_fig.findobj('Tag','applyunit')
+        
+        % get new unit string
+        popup_newunit = unit_fig.findobj('Style','popup');
+        
+        tag_newunit =  get(popup_newunit,'Tag');
+        % extract unit qualtity
+        newunit_q = cellfun(@(nu) textscan('popup_%s',nu),tag_newunit);
+        
+        newunit_string = cellfun(@(nu) unit_fig.findobj('Tag',nu).String{unit_fig.findobj('Tag',nu).Value},tag_newunit,'UniformOutput',0);
+        
     end
 end
 
