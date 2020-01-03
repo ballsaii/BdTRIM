@@ -32,18 +32,13 @@ end
         
         % add work tab
         new_tab = b.addplot;
-        
         new_tab.Title = sprintf('WorkPlot %d',no);
-        
         path = string(a.findobj('Tag','list_load').String(a.findobj('Tag','list_load').Value));
         
         % apply function to move uicontrol
         b.handles.tabgroup_plot.SelectedTab = new_tab;
-        
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_path').String = path;
-        
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_apply').Callback = @commandplot;
-        
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_save').Callback = @save_command;
         b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_load').Callback = @load_command;
         
@@ -145,19 +140,28 @@ end
     end
 
     function unitconvertor(hObject,evendata,handles)
-        % load current units to GUI
+        % 
         target_file = a.findobj('Tag','list_load').Value;
+        
+        % load objbeam
         this = objbeam(target_file);
         
         % open GUI for unit setting returning figure
         unit_fig = b.unit_conversion(this);
+        
         unit_fig.findobj('Tag','applyunit').Callback = @applyunitH;
-    end
-    
-    function applyunitH(hObject,evendata,handles)
+        unit_fig.findobj('Tag','cancelunit').Callback = @cancelunitH;
         
-        
-    applyunit(unit_fig,this);
+        function applyunitH(hObject,evendata,handles)
+            that = applyunit(unit_fig,this);
+            objbeam(target_file) = that;
+            close(unit_fig);
+            return;
+        end
+        function cancelunitH(hObject,evendata,handles)
+            close(unit_fig);
+            return;
+        end
     end
 
 end
