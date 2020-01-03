@@ -1,5 +1,5 @@
 function output = setunit(unit)
-%% convert unit
+% convert unit
 switch unit
     case 'x'
         unit = 'length';
