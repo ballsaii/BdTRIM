@@ -8,7 +8,7 @@ switch unit
     case 'time'
         output = {'us','ns','ps'};
     case 'divergent'
-        output = {'mrad','rad','1'};
+        output = {'mrad','rad'};
     case 'energy'
         output = {'keV','MeV'};
     case 'charge'

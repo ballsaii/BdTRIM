@@ -2,47 +2,47 @@ function output = setunit(unit)
 % convert unit
 switch unit
     case 'x'
-        unit = 'length';
-        output = pos_unit(unit);
+        unitq = 'length';
+        output = pos_unit(unitq);
     case 'y'
-        unit = 'length';
-        output = pos_unit(unit);
+        unitq = 'length';
+        output = pos_unit(unitq);
     case 'z'
-        unit = 'length';
-        output = pos_unit(unit);
+        unitq = 'length';
+        output = pos_unit(unitq);
     case 'px'
-        unit = 'momentum';
-        output = pos_unit(unit);
+        unitq = 'momentum';
+        output = pos_unit(unitq);
     case 'py'
-        unit = 'momentum';
-        output = pos_unit(unit);
+        unitq = 'momentum';
+        output = pos_unit(unitq);
     case 'pz'
-        unit = 'momentum';
-        output = pos_unit(unit);
+        unitq = 'momentum';
+        output = pos_unit(unitq);
     case 'xp'
-        unit = 'divergent';
-        output = pos_unit(unit);
+        unitq = 'divergent';
+        output = pos_unit(unitq);
     case 'yp'
-        unit = 'divergent';
-        output = pos_unit(unit);
+        unitq = 'divergent';
+        output = pos_unit(unitq);
     case 'Ek'
-        unit = 'energy';
-        output = pos_unit(unit);
+        unitq = 'energy';
+        output = pos_unit(unitq);
     case 'charge'
-        unit = 'charge';
-        output = pos_unit(unit);
+        unitq = 'charge';
+        output = pos_unit(unitq);
     case 'time'
-        unit = 'charge';
-        output = pos_unit(unit);
+        unitq = 'charge';
+        output = pos_unit(unitq);
     case 'time2'
-        unit = 'charge';
-        output = pos_unit(unit);
+        unitq = 'charge';
+        output = pos_unit(unitq);
     case 'index'
-        unit = 'none';
-        output = pos_unit(unit);
+        unitq = 'none';
+        output = pos_unit(unitq);
     case 'flag'
-        unit = 'none';
-        output = pos_unit(unit);
+        unitq = 'none';
+        output = pos_unit(unitq);
         
 end
 
