@@ -200,8 +200,17 @@ classdef Vis_GUI
             
             % new unit
             newunit_tag = [{'popup_newunit'},cellfun(@(ss) sprintf('popup_%s',ss),fieldunit,'UniformOutput',0)'];
-
+            
             posunit = cellfun(@(u) setunit(u), fieldunit,'UniformOutput',0);
+            units = cellfun(@(u) getfield(objbeam.unit,u),fieldunit,'UniformOutput',0);
+            test = strcmp(pos_unit(unitq),units{1});
+            unit_index = find(test==true);
+            default_pos =
+            posunit{i}{default_pos}
+            
+            test = strcmp(pos_unit(unitq),unit);
+        unit_index = find(test==true);
+        
             newunit = [{'New unit'},posunit'];
                 uicontrol( ...
                     'Parent', f, ...
@@ -274,7 +283,7 @@ classdef Vis_GUI
                 
                 ypos = ypos - 40;
             end
-                            % new unit
+            % Apply and cancel buttons
                 uicontrol( ...
                     'Parent', f, ...
                     'Tag', 'applyunit', ...
