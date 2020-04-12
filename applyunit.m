@@ -1,28 +1,23 @@
 function this = applyunit(unit_fig,this)
 
-tag_newunit =  get(unit_fig.findobj('Style','popup'),'Tag');
+newunit_index =  flipud(get(unit_fig.findobj('Style','popup'),'Value'));
+pos = flipud(get(unit_fig.findobj('Style','popup'),'String'));
+f = fieldnames(this.unit);
 
-% extract unitq from GUI
-unitn = fieldnames(this);
-new_unit = flip(cellfun(@(nu) unit_fig.findobj('Tag',nu).String{unit_fig.findobj('Tag',nu).Value},tag_newunit,'UniformOutput',0));
-old_unit = struct2cell(this.unit);
-
-% changing unit
-that = this;
-for i=1:length(old_unit)
-this = this.unitconvert(unitn{i},old_unit{i},new_unit{i});
+mean(this.x)
+for i=1:length(f)
+    % change string
+    new_unit{i} = pos{i}{newunit_index{i}};
+    
+    old_unit = getfield(this.unit,f{i});
+    convert_factor{i} = convertunit(unit2unitq(old_unit),old_unit,new_unit{i});
+    new_value{i} = getfield(this,f{i})*convert_factor{i};
+    this = setfield(this,f{i},new_value{i});
+    
 end
-% for i=1:length(unitn)
-%     % set new unit 
-%     this.unit = setfield(this.unit,unitn{i}{1},new_unit{i});
-%     
-%     % change value
-%     f1 = convertunit(setunitq(unitn{i}{1}),old_unit{i},new_unit{i});
-% 
-% end
 
-
-% converting unit
+% apply new unit
+this.unit = cell2struct(new_unit',f);
 
 
 end
