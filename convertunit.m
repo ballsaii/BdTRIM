@@ -29,6 +29,9 @@ convert_factor = f1/f2;
             case 'charge'
                 % {'nC','pC'};
                 v = [1E-9 1E-12];
+            otherwise
+                factor = 1;
+                return
         end
         factor = v(unit_index);
     end

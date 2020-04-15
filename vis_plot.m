@@ -58,6 +58,7 @@ end
         % condition
         condition = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_condition').String;
         
+        %display to global workspace for condition
         x = current_objbeam.x;
         y= current_objbeam.y;
         z= current_objbeam.z;
@@ -105,17 +106,13 @@ end
         
         % active current axes
         axes(b.handles.tabgroup_plot.SelectedTab.findobj('Type','Axes'));
-        
-        
+          
         try obj_command = evalin('caller',command);
         catch h= warndlg('Input wrong command');
         end
-        
-        whos
         %         try eval(command)
         %         catch h= warndlg('Input wrong command');
         %         end
-        
     end
 
     function save_command(hObject,evendata,handles)
