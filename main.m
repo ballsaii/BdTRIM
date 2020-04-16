@@ -8,6 +8,7 @@ a = Load_GUI;
 a.handles.uimenu_workspace.Callback = @refresh;
 a.handles.uimenu_load_workspace_SRIM.Callback = @loadSRIM;
 a.handles.uimenu_load_workspace_ASTRA.Callback = @loadASTRA;
+a.handles.uimenu_load_workspace_PARMELA.Callback = @loadPARMELA;
 a.handles.uimenu_new_workspace.Callback = @addwork;
 a.handles.uimenu_delete_workspace.Callback = @deletework;
 a.handles.uimenu_analysis.Callback = @send_Vis_GUI;
@@ -94,13 +95,45 @@ no=1;
         end
         a.handles.tabgroup_work.SelectedTab.data = ASTRAobj;
         
-        loaddis(data_array,ASTRAobj);
+        % define string in load_list (ATSRA use filepath)
+        showload = arrayfun(@(x) x.path,data_array,'UniformOutput',false);
+        
+        loaddis(showload,ASTRAobj);
         
         % add SRIM_Workspace
         %         a.handles.tabgroup_work.SelectedTab.Title = strcat('ASTRA_',a.handles.tabgroup_work.SelectedTab.Title);
     end
 
-    function loaddis(data_array,obj)
+    function loadPARMELA(hObject,evendata,handles)
+        
+        % call local function to read file
+        cdata_array = importPARMELA(getPath);
+        
+        % convert data_array.data to SRIMobj
+        PARMELAobj = cellfun(@(dis) PARMELAdis(dis),cdata_array.data);
+        
+        % add properties to selecttab
+        try
+            a.handles.tabgroup_work.SelectedTab.addprop('data');
+        catch
+        end
+        
+        % convert to obj array
+%         PARMELAobj = [cPARMELAobj{1:length(cPARMELAobj)}];
+        data_array = cdata_array;
+        
+        a.handles.tabgroup_work.SelectedTab.data = PARMELAobj;
+        
+        % define string in load_list (PARMELA use ref_phase)
+        showload = cellfun(@(x) x.ref_phase,data_array.data,'UniformOutput',false);
+        
+        loaddis(showload,PARMELAobj);
+        
+        % add SRIM_Workspace
+        %         a.handles.tabgroup_work.SelectedTab.Title = strcat('ASTRA_',a.handles.tabgroup_work.SelectedTab.Title);
+    end
+
+    function loaddis(showload,obj)
         
         % listbox define
         list = a.handles.tabgroup_work.SelectedTab.findobj('Tag','list_load');
@@ -124,7 +157,9 @@ no=1;
             end
             % write file to listbox
             old = list.String;
-            new = data_array(ii).path;
+
+            new = showload{ii};
+
             old{end+1}=new;
             
             % update to listbox
