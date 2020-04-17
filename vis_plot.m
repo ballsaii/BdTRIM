@@ -52,55 +52,21 @@ end
 
     function commandplot(hObject,evendata,handles)
         
-        
+        % single plot
         target_file = a.findobj('Tag','list_load').Value;
         current_objbeam = objbeam(target_file);
         % condition
         condition = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_condition').String;
         
         %display to global workspace for condition
-        x = current_objbeam.x;
-        y= current_objbeam.y;
-        z= current_objbeam.z;
-        xp = current_objbeam.xp;
-        yp = current_objbeam.yp;
-        Ek = current_objbeam.Ek;
-        
-        if ~isempty(condition)
-            % apply condition
-            x1 = current_objbeam.x(eval(condition));
-            y1 = current_objbeam.y(eval(condition));
-            z1 = current_objbeam.z(eval(condition));
-            xp1 = current_objbeam.xp(eval(condition));
-            yp1 = current_objbeam.yp(eval(condition));
-            Ek1 = current_objbeam.Ek(eval(condition));
-            
-            % assign data
-            assignin('caller','x',x1);
-            assignin('caller','y',y1);
-            assignin('caller','z',z1);
-            assignin('caller','xp',xp1);
-            assignin('caller','yp',yp1);
-            assignin('caller','Ek',Ek1);
-            
-        else
-            % no condition
-            x1 = current_objbeam.x(:);
-            y1 = current_objbeam.y(:);
-            z1 = current_objbeam.z(:);
-            xp1 = current_objbeam.xp(:);
-            yp1 = current_objbeam.yp(:);
-            Ek1 = current_objbeam.Ek(:);
-            
-            % assign data
-            assignin('caller','x',x1);
-            assignin('caller','y',y1);
-            assignin('caller','z',z1);
-            assignin('caller','xp',xp1);
-            assignin('caller','yp',yp1);
-            assignin('caller','Ek',Ek1);
-            
+        % inspect the properties of obj
+        p1 = properties(current_objbeam);
+        f1 = fieldnames(current_objbeam);
+%       
+        for i=1:length(f1)
+        assignin('caller',f1{i},getfield(current_objbeam,p1{i}))
         end
+
         % set command
         command = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String;
         
@@ -108,7 +74,7 @@ end
         axes(b.handles.tabgroup_plot.SelectedTab.findobj('Type','Axes'));
           
         try obj_command = evalin('caller',command);
-        catch h= warndlg('Input wrong command');
+        catch h= warndlg('Wrong command!');
         end
         %         try eval(command)
         %         catch h= warndlg('Input wrong command');
@@ -160,7 +126,7 @@ end
             return;
         end
     end
-
 end
+
 
 
