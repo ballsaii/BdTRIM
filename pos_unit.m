@@ -13,9 +13,11 @@ switch unit
         output = {'keV','MeV'};
     case 'charge'
         output = {'nC','pC'};
+    case 'phase'
+        output = {'degree'};
     otherwise
         output = {'1'};
-            
+        
 end
 end
 

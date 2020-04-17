@@ -43,7 +43,10 @@ switch unit
     case 'flag'
         unitq = 'none';
         output = pos_unit(unitq);
-        
+    case 'phase'
+        unitq = 'phase';
+        output =  pos_unit(unitq);
+
 end
 
 end

@@ -59,13 +59,60 @@ end
         condition = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_condition').String;
         
         %display to global workspace for condition
-        x = current_objbeam.x;
-        y= current_objbeam.y;
-        z= current_objbeam.z;
-        xp = current_objbeam.xp;
-        yp = current_objbeam.yp;
-        Ek = current_objbeam.Ek;
         
+        try 
+            x = current_objbeam.x;
+            catch
+        end
+        try
+            y = current_objbeam.y;
+        catch
+
+        end
+        try
+            z = current_objbeam.z;
+        catch
+
+        end
+        try
+            xp = current_objbeam.xp;
+        catch
+
+        end
+        try
+            yp = current_objbeam.yp;
+        catch
+
+        end
+        try
+            px = current_objbeam.px;
+        catch
+
+        end
+        try
+            py = current_objbeam.py;
+        catch
+
+        end
+        
+        try
+            pz = current_objbeam.pz;
+        catch
+
+        end
+        
+        try
+            Ek = current_objbeam.Ek;
+        catch
+
+        end
+        
+        try
+            phase = current_objbeam.phase;
+        catch
+
+        end
+
         if ~isempty(condition)
             % apply condition
             x1 = current_objbeam.x(eval(condition));
@@ -106,7 +153,7 @@ end
         
         % active current axes
         axes(b.handles.tabgroup_plot.SelectedTab.findobj('Type','Axes'));
-          
+        
         try obj_command = evalin('caller',command);
         catch h= warndlg('Input wrong command');
         end
@@ -137,7 +184,7 @@ end
     end
 
     function unitconvertor(hObject,evendata,handles)
-        % 
+        %
         target_file = a.findobj('Tag','list_load').Value;
         
         % load objbeam

@@ -4,7 +4,6 @@ newunit_index =  flipud(get(unit_fig.findobj('Style','popup'),'Value'));
 pos = flipud(get(unit_fig.findobj('Style','popup'),'String'));
 f = fieldnames(this.unit);
 
-mean(this.x)
 for i=1:length(f)
     % change string
     new_unit{i} = pos{i}{newunit_index{i}};
