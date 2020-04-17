@@ -10,6 +10,7 @@ classdef PARMELAdis
         Ek
         phase
         unit
+        
     end
     
     %%______________________________________________________________________
@@ -78,8 +79,8 @@ classdef PARMELAdis
             switch size(parmeladist.data,2)
                 case 8
                     % filter NAN out
-                    raw = parmeladist.data(find(isnan(parmeladist.data(:,6)==0)),:);
                     
+                    raw = parmeladist.data((all((~isnan(parmeladist.data)),2)),:);
                     % relative z,pz,time to absolute value
                     phase  = parmeladist.ref_phase + raw(:,5);
                     
@@ -156,7 +157,6 @@ classdef PARMELAdis
             end
             
         end
-        
     end
 end
 
