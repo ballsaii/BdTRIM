@@ -1,6 +1,15 @@
 classdef PARMELAdis
     properties
+        x
+        y
+        px
+        py
+        pz
+        xp
+        yp
+        Ek
         phase
+        unit
     end
     
     %%______________________________________________________________________
@@ -66,33 +75,85 @@ classdef PARMELAdis
     methods
         function obj = PARMELAdis(parmeladist)
             
-            % relative z,pz,time to absolute value
-            obj.phase  = parmeladist.ref_phase + parmeladist.data(:,5);
-            
-             % assign to obj
-            obj.x = parmeladist.data(:,1);
-            obj.unit.x = 'cm';
-            obj.y = parmeladist.data(:,3);
-            obj.unit.y = 'cm';
-
             switch size(parmeladist.data,2)
-                case 7
-                    xp = parmeladist.data(:,2);
-                    yp = parmeladist.data(:,4);
                 case 8
-                    xp = parmeladist.data(:,2);
-                    yp = parmeladist.data(:,4);
+                    % filter NAN out
+                    raw = parmeladist.data(find(isnan(parmeladist.data(:,6)==0)),:);
+                    
+                    % relative z,pz,time to absolute value
+                    phase  = parmeladist.ref_phase + raw(:,5);
+                    
+                    %
+                    x = raw(:,1);
+                    y = raw(:,3);
+                    
+                    
+                    bgx = raw(:,2);
+                    bgy = raw(:,4);
+                    bgz = raw(:,6);
+                    
+                    px = betagamma2p(bgx);
+                    py = betagamma2p(bgy);
+                    pz = betagamma2p(bgz);
+                    
+                    ptotal = sqrt(px.^2+py.^2+pz.^2);
+                    
+                    Ek = p2E(ptotal);
+                    
+                    xp = atan(px./pz)*1000;
+                    yp = atan(px./pz)*1000;
+                    
+                    % assign
+                    obj.x = x;
+                    obj.y = y;
+                    obj.px = px;
+                    obj.py = py;
+                    obj.pz = pz;
+                    obj.xp = xp;
+                    obj.yp = yp;
+                    obj.Ek = Ek;
+                    obj.phase = phase;
+                    
+                    obj.unit.x = 'cm';
+                    obj.unit.y = 'cm';
+                    obj.unit.px = 'eV/c';
+                    obj.unit.py = 'eV/c';
+                    obj.unit.pz = 'eV/c';
+                    obj.unit.xp = 'mrad';
+                    obj.unit.yp = 'mrad';
+                    obj.unit.Ek = 'MeV';
+                    obj.unit.phase = 'degree';
+                    
+                case 7
+                    % relative z,pz,time to absolute value
+                    raw = parmeladist.data;
+                    phase  = parmeladist.ref_phase + raw(:,5);
+                    
+                    %
+                    x = raw(:,1);
+                    y = raw(:,3);
+                    
+                    xp = raw(:,2);
+                    yp = raw(:,4);
+                    
+                    Ek = raw(:,6);
+                    
+                    % assign
+                    obj.x = x;
+                    obj.y = y;
+                    obj.xp = xp;
+                    obj.yp = yp;
+                    obj.phase = phase;
+                    obj.Ek = Ek;
+                    
+                    obj.unit.x = 'cm';
+                    obj.unit.y = 'cm';
+                    obj.unit.xp = 'mrad';
+                    obj.unit.yp = 'mrad';
+                    obj.unit.Ek = 'MeV';
+                    obj.unit.phase = 'degree';
+                    
             end
-            obj.xp = xp;
-            obj.unit.xp = 'mrad';
-            obj.yp = yp;
-            obj.unit.yp = 'mrad';
-            
-            obj.pz = pz;
-            obj.unit.pz = 'eV/c';
-            obj.time = time;
-            obj.unit.time = 'ns';
-
             
         end
         
