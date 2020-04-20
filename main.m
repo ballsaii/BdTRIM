@@ -72,7 +72,14 @@ no=1;
             a.handles.tabgroup_work.SelectedTab.addprop('data');
         catch
         end
-        a.handles.tabgroup_work.SelectedTab.data = SRIMobj;
+        
+        try
+        data = [a.handles.tabgroup_work.SelectedTab.data SRIMobj];
+        a.handles.tabgroup_work.SelectedTab.data = data;
+        catch
+            warndlg('Please load the same distibution in the workspace');
+            return;
+        end
         
         loaddis(data_array,SRIMobj);
         
@@ -93,7 +100,14 @@ no=1;
             a.handles.tabgroup_work.SelectedTab.addprop('data');
         catch
         end
-        a.handles.tabgroup_work.SelectedTab.data = ASTRAobj;
+        
+        try
+        data = [a.handles.tabgroup_work.SelectedTab.data ASTRAobj];
+        a.handles.tabgroup_work.SelectedTab.data = data;
+        catch
+            warndlg('Please load the same distibution in the workspace');
+            return;
+        end
         
         % define string in load_list (ATSRA use filepath)
         showload = arrayfun(@(x) x.path,data_array,'UniformOutput',false);
@@ -116,13 +130,18 @@ no=1;
         try
             a.handles.tabgroup_work.SelectedTab.addprop('data');
         catch
+            warndlg('Please load the same distibution in the workspace');
+            return;
         end
         
         % convert to obj array
 %         PARMELAobj = [cPARMELAobj{1:length(cPARMELAobj)}];
         data_array = cdata_array;
-        
-        a.handles.tabgroup_work.SelectedTab.data = PARMELAobj;
+        try
+        data = [a.handles.tabgroup_work.SelectedTab.data PARMELAobj];
+        a.handles.tabgroup_work.SelectedTab.data = data;
+        catch
+        end
         
         % define string in load_list (PARMELA use ref_phase)
         showload = cellfun(@(x) x.ref_phase,data_array.data,'UniformOutput',false);
@@ -152,7 +171,7 @@ no=1;
             try
                 a.handles.tabgroup_work.SelectedTab.data(i)=obj(ii);
             catch
-                warndlg('Please load same distibution in a workspace');
+                warndlg('Please load the same distibution in the workspace');
                 return;
             end
             % write file to listbox

@@ -22,7 +22,7 @@ classdef ASTRAdis
             % filter active particles
             flag = astradist(:,10);
             data = astradist(find(flag>=0),:);
-
+            
             % relative z,pz,time to absolute value
             z_ref = astradist(1,3);
             pz_ref = astradist(1,6);
@@ -38,7 +38,7 @@ classdef ASTRAdis
             py = data(:,5);
             charge = data(:,8);
             index = data(:,9);
- 
+            
             % assign to obj
             obj.x = x;
             obj.unit.x = 'm';
@@ -54,7 +54,7 @@ classdef ASTRAdis
             obj.unit.pz = 'eV/c';
             obj.time = time;
             obj.unit.time = 'ns';
-
+            
             
             % calculate time2
             ptotal = sqrt(px.^2+py.^2+pz.^2);
@@ -78,8 +78,68 @@ classdef ASTRAdis
             obj.time2 = (time(1)-((z-z(1))./(betaz*2.99792458E-1)));
             obj.unit.time2 = 'ns';
             
-            end
         end
+        function output = emit(obj,varargin)
+            % How to use
+            % emit(obj) default geometry, formula1 (==emit('x','g',1))
+            % emit(obj,'n') normalized, formula1
+            % emit(obj,'n',2) normalized, formula2
+            %------------------------------------------------------------------%
+            % define default parameters
+            type = 'geo';% or 'norm'
+            formula = 1;
+            %
+            switch nargin
+                case 1
+                    output = getemit(obj,type);
+                case 2
+                    % example emit('x','n')
+                    type = varargin{1};
+                    output = getemit(obj,type);
+                case 3
+                    % example emit('x','n',1)
+                    type = varargin{1};
+                    formula = varargin{2};
+                    output = getemit(obj,type);
+                otherwise
+                    error('too many arguments');
+                    return
+            end
+            
+            function output = getemit(obj,type)
+                % check essential members exist
+                p = properties(obj);
+                if all(ismember({'x','xp','y','yp'},p))
+                else
+                    return
+                end
+                
+                % assign local vars
+                x=obj.x;
+                y=obj.y;
+                xp = obj.xp;
+                yp = obj.yp;
+                
+                output = struct;
+                output.x = getEmit(x,xp);
+                output.y = getEmit(y,yp);
+                
+                output.xy = getEmit(x,xp,y,yp);
+                
+                % unit
+                output.unit.x = strjoin({obj.unit.x,obj.unit.xp});
+                output.unit.y = strjoin({obj.unit.y,obj.unit.yp});
+                output.unit.xy = strjoin({obj.unit.x,obj.unit.xp,obj.unit.y,obj.unit.yp});
+            end
+            
+            %                 obj
+            %                 xory
+            %                 type
+            %                 formula
+            
+            
+        end
+    end
 end
-    
-    
+
+
