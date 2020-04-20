@@ -79,34 +79,28 @@ classdef ASTRAdis
             obj.unit.time2 = 'ns';
             
         end
-        function output = emit(obj,varargin)
+        function output = emit(obj,type,varargin)
             % How to use
             % emit(obj) default geometry, formula1 (==emit('x','g',1))
             % emit(obj,'n') normalized, formula1
             % emit(obj,'n',2) normalized, formula2
             %------------------------------------------------------------------%
             % define default parameters
-            type = 'geo';% or 'norm'
-            formula = 1;
             %
             switch nargin
-                case 1
-                    output = getemit(obj,type);
                 case 2
-                    % example emit('x','n')
-                    type = varargin{1};
-                    output = getemit(obj,type);
+                    output = getemit(obj,type,'geo');
                 case 3
-                    % example emit('x','n',1)
-                    type = varargin{1};
-                    formula = varargin{2};
-                    output = getemit(obj,type);
+                    % example emit('x','n')
+                    output = getemit(obj,type,varargin{1});
                 otherwise
                     error('too many arguments');
                     return
             end
             
-            function output = getemit(obj,type)
+            function output = getemit(obj,type,normalized)
+                
+                narginchk(2,3);
                 % check essential members exist
                 p = properties(obj);
                 if all(ismember({'x','xp','y','yp'},p))
@@ -119,17 +113,27 @@ classdef ASTRAdis
                 y=obj.y;
                 xp = obj.xp;
                 yp = obj.yp;
-                
-                output = struct;
-                output.x = getEmit(x,xp);
-                output.y = getEmit(y,yp);
-                
-                output.xy = getEmit(x,xp,y,yp);
-                
+                Ek = obj.Ek;
+                switch type
+                    case 'x'
+                        emit = getEmit(x,xp);
+                    case 'y'
+                        emit = getEmit(y,yp);
+                    case 'xy'
+                        emit = getEmit(x,xp,y,yp);
+                end
                 % unit
-                output.unit.x = strjoin({obj.unit.x,obj.unit.xp});
-                output.unit.y = strjoin({obj.unit.y,obj.unit.yp});
-                output.unit.xy = strjoin({obj.unit.x,obj.unit.xp,obj.unit.y,obj.unit.yp});
+                %                 output.unit.x = strjoin({obj.unit.x,obj.unit.xp});
+                %                 output.unit.y = strjoin({obj.unit.y,obj.unit.yp});
+                %                 output.unit.xy = strjoin({obj.unit.x,obj.unit.xp,obj.unit.y,obj.unit.yp});
+                switch normalized
+                    case 'geo'
+                        factor = 1;
+                        output = emit * factor;
+                    case 'norm'
+                        factor = p2beta(E2p(mean(Ek))).*p2gamma(E2p(mean(Ek)));
+                        output = emit * factor;
+                end
             end
             
             %                 obj
