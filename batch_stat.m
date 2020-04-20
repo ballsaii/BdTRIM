@@ -2,57 +2,55 @@ function [outputArg1,outputArg2] = batch_stat(a)
 
 % a is selectedTab object
 
-% creat new Vis_GUI
-b = Bat_GUI;
+% creat new obj
+% b = SetVar;
+test.alias = {'A','B'};
+test.text = {'mean(x)','mean(y)'};
+b = SetVar(test);
+ff = GUI_ShowVar(b);
 
 % set figure name by Tab title
-b.handles.vis_gui.Name = 'Batch Statistic';
+ff.Name = 'User-defined Variable';
 
 % create a working structor by a.data
 objbeam = a.data;
 
-% initialize uimenu
-b.handles.uimenu_new_workspace.Callback = @addplot;
-b.handles.uimenu_delete_workspace.Callback = @deletework;
-b.handles.uimenu_goplot.Callback = @goplot;
-
 no = 1;
 
-% auto generate tabd
-if isempty(b.handles.tabgroup_batch.Children)
-    % add auto tab
-    addplot
-end
+% assign function callback to object in class
+% add item
+ff.findobj('Tag','uimenu_add_var').Callback = @addVar;
+% edit item
+% remove item
 
-    function addplot(hObject,evendata,handles)
-        
-        % add work tab
-        new_tab = b.addplot;
-        
-        new_tab.Title = sprintf('BatchTab %d',no);
-        
-        path = a.Title;
-        
-        % apply function to move uicontrol
-        b.handles.tabgroup_batch.SelectedTab = new_tab;
-        
-        b.handles.tabgroup_batch.SelectedTab.findobj('Tag','txt_path').String = path;
-        
-        b.handles.tabgroup_batch.SelectedTab.findobj('Tag','txt_apply').Callback = @commandbatch;
-        
-        b.handles.tabgroup_batch.SelectedTab.findobj('Tag','txt_save').Callback = @save_command;
-        b.handles.tabgroup_batch.SelectedTab.findobj('Tag','txt_load').Callback = @load_command;
-        
-        % increase one for next
-        no = no+1;
+% add preview existing variables
+    function addVar(hObject,evendata,handles)
+        c = b.addVar(ff);
+        handles = guihandles(c);
+        c.findobj('Tag','txt_var_apply').Callback = {@ApplyVar,c};
     end
+
+    function ApplyVar(hObject,evendata,handles)
+        new.alias = handles.findobj('Tag','txt_var_alias').String;
+        new.text = handles.findobj('Tag','txt_var_text').String;
+
+        % append data
+        b = SetVar(b,new);
+
+        % close Apply figure
+        close(handles);
+        
+        % update GUIShowVar
+        ff = GUI_ShowVar(b,ff);
+    end
+
 
     function deletework(hObject,evendata,handles)
         b.deletework
     end
 
-    function commandbatch (hObject,evendata,handles)
-           
+    function commandbatch(hObject,evendata,handles)
+        
         command = b.handles.tabgroup_batch.SelectedTab.findobj('Tag','txt_command').String;
         sendcommand = sprintf('arrayfun(@(all) %s, objbeam,''uni'',0)',command);
         

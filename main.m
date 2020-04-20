@@ -11,7 +11,7 @@ a.handles.uimenu_load_workspace_ASTRA.Callback = @loadASTRA;
 a.handles.uimenu_load_workspace_PARMELA.Callback = @loadPARMELA;
 a.handles.uimenu_new_workspace.Callback = @addwork;
 a.handles.uimenu_delete_workspace.Callback = @deletework;
-a.handles.uimenu_analysis.Callback = @send_Vis_GUI;
+
 
 % number of tab
 no=1;
@@ -42,19 +42,27 @@ no=1;
         % initiate callback for buttons
         a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_moveup').Callback = @moveup;
         a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_movedown').Callback = @movedown;
-        a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_batch').Callback = @batch;
+        a.handles.tabgroup_work.SelectedTab.findobj('Tag','chk_batch').Callback = @chkbatch;
         a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_removeitem').Callback = @removeitem;
+        a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_GoPlot').Callback = @GoPlot;
+        a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_GoBatch').Callback = @GoBatch;
         no = no+1;
     end
 
-    function batch(hObject,evendata,handles)
+    function chkbatch(hObject,evendata,handles)
         list = a.handles.tabgroup_work.SelectedTab.findobj('Tag','list_load');
-        
+        btnGoBatch = a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_GoBatch');
+        btnGoPlot = a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_GoPlot');
         if hObject.Value
             % batch
             set(list,'Enable','off');
+            set(btnGoBatch ,'Enable','on')
+            set(btnGoPlot ,'Enable','off')
+
         else
             set(list,'Enable','on');
+            set(btnGoBatch ,'Enable','off')
+            set(btnGoPlot ,'Enable','on')
         end
         
     end
@@ -81,7 +89,9 @@ no=1;
             return;
         end
         
-        loaddis(data_array,SRIMobj);
+        % define string in load_list (SRIM use filepath)
+        showload = arrayfun(@(x) x.path,data_array,'UniformOutput',false);
+        loaddis(showload,SRIMobj);
         
         % add SRIM_Workspace
         %         a.handles.tabgroup_work.SelectedTab.Title = strcat('SRIM_',a.handles.tabgroup_work.SelectedTab.Title);
@@ -259,14 +269,14 @@ no=1;
         end
     end
 
-    function send_Vis_GUI(hObject,evendata,handles)
+    function GoPlot(hObject,evendata,handles)
         % send to
-        batch_button = a.handles.tabgroup_work.SelectedTab.findobj('Tag','btn_batch');
-        if batch_button.Value
-            batch_stat(a.handles.tabgroup_work.SelectedTab)
-        else
-            vis_plot(a.handles.tabgroup_work.SelectedTab)
-        end
+        vis_plot(a.handles.tabgroup_work.SelectedTab)
+    end
+
+    function GoBatch(hObject,evendata,handles)
+        % send to
+        batch_stat(a.handles.tabgroup_work.SelectedTab)
     end
 end
 
