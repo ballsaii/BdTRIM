@@ -10,32 +10,34 @@ classdef SetVar
     
     methods
         function obj = SetVar(varargin)
+            narginchk(0,1)
+            try
+                obj.alias = varargin{1}.alias;
+                obj.text = varargin{1}.text;
+            catch
+                obj.alias = {''};
+                obj.text = {''};
+            end
+            
+        end
+        function obj = modVar(obj,varargin)
             
             narginchk(0,3)
 
             switch length(varargin)
-                % construct mode
-                case 0
-                    obj.alias = [];
-                    obj.text = [];
-                    
-                    % convert mode
-                case 1
-                    obj.alias = a.alias;
-                    obj.text = a.alias;
-                    
                     % append mode
-                case 2
-                    new = varargin{2};
+                case 1
+                    new = varargin{1};
                     obj.alias = [obj.alias,new.alias];
                     obj.text = [obj.text,new.text];
-                    
+                    disp('appending')
                     % edit mode
-                case 3
-                    new = varargin{2};
-                    edit_no = varargin{3};
+                case 2
+                    new = varargin{1};
+                    edit_no = varargin{2};
                     obj.alias(edit_no) = new.alias;
                     obj.text(edit_no) = new.text;
+                    disp('editing')
             end
         end
         

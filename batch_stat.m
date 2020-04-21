@@ -32,15 +32,17 @@ set(ff.findobj('Type','UIControl','style','pushbutton'),'Callback',{@editVar});
         c = b.addVar;
         handles = guihandles(c);
         c.findobj('Tag','txt_var_apply').Callback = {@ApplyVar,c};
+        b
     end
 
     function ApplyVar(hObject,evendata,handles)
+        b
         new.alias = handles.findobj('Tag','txt_var_alias').String;
         new.text = handles.findobj('Tag','txt_var_text').String;
-        
+        b
         % append data
-        b = SetVar(b,new);
-        
+        b = modVar(b,new);
+        b
         % close Apply figure
         close(handles);
         
@@ -66,8 +68,8 @@ set(ff.findobj('Type','UIControl','style','pushbutton'),'Callback',{@editVar});
         new.text = handles.findobj('Tag','txt_var_text').String;
         
         % edit data
-        b = SetVar(b,new,edit_no);
-        
+        b = modVar(b,new,edit_no);
+        b
         % close Apply figure
         close(handles);
         
