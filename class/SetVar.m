@@ -9,28 +9,33 @@ classdef SetVar
     end
     
     methods
-        function obj = SetVar(a,varargin)
+        function obj = SetVar(varargin)
             
-            narginchk(1,3)
-            try
-                obj.alias = a.alias;
-                obj.text = a.text;
-                %                     allno=length(a.alias);
-            catch
-                obj.alias = {''};
-                obj.text = {''};
-                %                 allno = 1;
-            end
-            
-            if length(varargin)==1 % append mode
-                new = varargin{1};
-                obj.alias = [obj.alias,new.alias];
-                obj.text = [obj.text,new.text];
-            elseif length(varargin)==2 % edit mode
-                new = varargin{1};
-                edit_no = varargin{2};
-                obj.alias(edit_no) = new.alias;
-                obj.text(edit_no) = new.text;
+            narginchk(0,3)
+
+            switch length(varargin)
+                % construct mode
+                case 0
+                    obj.alias = [];
+                    obj.text = [];
+                    
+                    % convert mode
+                case 1
+                    obj.alias = a.alias;
+                    obj.text = a.alias;
+                    
+                    % append mode
+                case 2
+                    new = varargin{2};
+                    obj.alias = [obj.alias,new.alias];
+                    obj.text = [obj.text,new.text];
+                    
+                    % edit mode
+                case 3
+                    new = varargin{2};
+                    edit_no = varargin{3};
+                    obj.alias(edit_no) = new.alias;
+                    obj.text(edit_no) = new.text;
             end
         end
         
@@ -136,7 +141,7 @@ classdef SetVar
         function f = showVar(obj,varargin)
             % limit varargin
             narginchk(1,2)
-          
+            
             % define figure
             allno = length(obj.alias);
             
@@ -152,7 +157,7 @@ classdef SetVar
                     'MenuBar', 'none',...'
                     'Name','Preview Variables',...
                     'Tag','setvar_gui');
-%                 f.Children.delete
+                %                 f.Children.delete
                 delete(f.findobj('Type', 'UIControl'))
                 % add new uimenu
             else
@@ -228,12 +233,12 @@ classdef SetVar
                     'UserData',no);
             end
             
-%             function indexReturn(hObject,eventdata,handles)
-%                 data=hObject.UserData;
-%                 guidata(f,data)
-%             end
-%             set(btn_var_apply,'Callback',{@(batch_stat,event)batch_stateditVar(btn_var_apply,batch_stat,1)});
-
+            %             function indexReturn(hObject,eventdata,handles)
+            %                 data=hObject.UserData;
+            %                 guidata(f,data)
+            %             end
+            %             set(btn_var_apply,'Callback',{@(batch_stat,event)batch_stateditVar(btn_var_apply,batch_stat,1)});
+            
             %             text_var_text(:).String;
             %             obj.alias = {'assssss'};
             %             obj.text = {'tesss'};

@@ -3,10 +3,10 @@ function [outputArg1,outputArg2] = batch_stat(a)
 % a is selectedTab object
 
 % creat new obj
-% b = SetVar;
-test.alias = {'A','B'};
-test.text = {'mean(x)','mean(y)'};
-b = SetVar(test);
+b = SetVar();
+% test.alias = {'A','B'};
+% test.text = {'mean(x)','mean(y)'};
+% b = SetVar(test);
 ff = showVar(b);
 
 % set figure name by Tab title
