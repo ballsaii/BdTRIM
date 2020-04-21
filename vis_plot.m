@@ -1,6 +1,6 @@
-function vis_plot(a)
+function vis_plot(a,varargin)
 % a is selectedTab object
-
+varargin{1}
 try
     % create a working structor by a.data
     objbeam = a.data;
