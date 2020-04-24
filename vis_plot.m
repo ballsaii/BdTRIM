@@ -1,12 +1,21 @@
 function vis_plot(a,varargin)
-% a is selectedTab object
-varargin{1}
+
 try
     % create a working structor by a.data
     objbeam = a.data;
 catch
     return;
 end
+
+% evaluation batch command
+
+if ~length(varargin)==0
+    batch = 1;
+else
+    batch = 0;
+end
+
+% a is selectedTab object
 
 % creat new Vis_GUI
 b = Vis_GUI;
@@ -51,34 +60,67 @@ end
     end
 
     function commandplot(hObject,evendata,handles)
-        
-        % single plot
-        target_file = a.findobj('Tag','list_load').Value;
-        current_objbeam = objbeam(target_file);
-        % condition
-        condition = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_condition').String;
-        
-        %display to global workspace for condition
-        % inspect the properties of obj
-        p1 = properties(current_objbeam);
-        f1 = fieldnames(current_objbeam);
-%       
-        for i=1:length(f1)
-        assignin('caller',f1{i},getfield(current_objbeam,p1{i}))
-        end
+        if batch
+            % batch
+            bc = varargin{1};
+            
+            % loop for number of SetVar
+            for i=1:length(bc.alias)
+                
+                % loop for number of objbeam
+                for j=1:length(objbeam)
+                    
+                    current_objbeam = objbeam(j);
+                    p1 = properties(current_objbeam);
+                    f1 = fieldnames(current_objbeam);
+                    
+                    % assign to workspace
+                    assignin('caller',f1{i},getfield(current_objbeam,p1{i}));
+                    
+                    % create output array
+                    dummy(j) = evalin('caller',bc.text{i});
+                    
+                    % assign object to workspace
+                    assignin('caller','beam',objbeam(j));
+                end
+                % assign output array to alias
+                assignin('caller',bc.alias{i},dummy);
+                
 
+            end
+        else
+            % single plot
+            target_file = a.findobj('Tag','list_load').Value;
+            current_objbeam = objbeam(target_file);
+            % condition
+            condition = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_condition').String;
+            
+            % display to global workspace for condition
+            % inspect the properties of obj
+            p1 = properties(current_objbeam);
+            f1 = fieldnames(current_objbeam);
+            
+            % assign common variables to workspace
+            for i=1:length(f1)
+                assignin('caller',f1{i},getfield(current_objbeam,p1{i}))
+            end
+            
+            % assign object to workspace
+            assignin('caller','this',current_objbeam);
+        end
+        
         % set command
         command = b.handles.tabgroup_plot.SelectedTab.findobj('Tag','txt_command').String;
         
         % active current axes
         axes(b.handles.tabgroup_plot.SelectedTab.findobj('Type','Axes'));
-          
-        try obj_command = evalin('caller',command);
-        catch h= warndlg('Wrong command!');
+        
+        try
+            obj_command = evalin('caller',command);
+            disp(obj_command)
+        catch
+            h= warndlg('Wrong command!');
         end
-        %         try eval(command)
-        %         catch h= warndlg('Input wrong command');
-        %         end
     end
 
     function save_command(hObject,evendata,handles)
@@ -103,7 +145,7 @@ end
     end
 
     function unitconvertor(hObject,evendata,handles)
-        % 
+        %
         target_file = a.findobj('Tag','list_load').Value;
         
         % load objbeam
