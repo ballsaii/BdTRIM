@@ -1,5 +1,6 @@
 function vis_plot(a,varargin)
 % does it add to github??
+% push remote branch
 try
     % create a working structor by a.data
     objbeam = a.data;
