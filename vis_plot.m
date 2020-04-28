@@ -78,16 +78,17 @@ end
                     % assign to workspace
                     assignin('caller',f1{i},getfield(current_objbeam,p1{i}));
                     
-                    % create output array
-                    dummy(j) = evalin('caller',bc.text{i});
-                    
                     % assign object to workspace
                     assignin('caller','beam',objbeam(j));
+                    
+                    % create output array
+                    dummy(j) = evalin('caller',bc.text{i});
+                
                 end
                 % assign output array to alias
                 assignin('caller',bc.alias{i},dummy);
                 
-
+                
             end
         else
             % single plot
@@ -101,13 +102,14 @@ end
             p1 = properties(current_objbeam);
             f1 = fieldnames(current_objbeam);
             
+            % assign object to workspace
+            assignin('caller','beam',current_objbeam);
+            
             % assign common variables to workspace
             for i=1:length(f1)
                 assignin('caller',f1{i},getfield(current_objbeam,p1{i}))
             end
-            
-            % assign object to workspace
-            assignin('caller','this',current_objbeam);
+
         end
         
         % set command

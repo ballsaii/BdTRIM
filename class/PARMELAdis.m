@@ -21,7 +21,7 @@ classdef PARMELAdis
     %                   struct with fields:
     %
     %                     path: 'D:\BdTRIM\PHASESPACE.TXT'
-    %                     data: {[1×1 struct]  [1×1 struct]}
+    %                     data: {[1ï¿½1 struct]  [1ï¿½1 struct]}
     %%______________________________________________________________________
     %                     data_array.data{i=1:2}
     %
@@ -32,7 +32,7 @@ classdef PARMELAdis
     %                         numberparticle: 350000
     %                                  ref_z: 0
     %                              ref_phase: 180.1180
-    %                                   data: [350000×7 double]
+    %                                   data: [350000ï¿½7 double]
     %
     %
     %                 Column	Parameter	Description
@@ -50,7 +50,7 @@ classdef PARMELAdis
     %                       struct with fields:
     %
     %                         path: 'D:\BdTRIM\TAPE3.txt'
-    %                         data: {1×10 cell}
+    %                         data: {1ï¿½10 cell}
     %%______________________________________________________________________
     %                     data_array.data{i=1:10}
     %
@@ -60,7 +60,7 @@ classdef PARMELAdis
     %
     %                                  ref_phase: 162
     %                         numberparticle: 105184
-    %                                   data: [105184×8 double]
+    %                                   data: [105184ï¿½8 double]
     %
     %                 Table IV-4. Contents of file named by TimeStepOutName.
     %                 Column	Parameter	Description
@@ -153,10 +153,10 @@ classdef PARMELAdis
                     obj.unit.yp = 'mrad';
                     obj.unit.Ek = 'MeV';
                     obj.unit.phase = 'degree';
-                    
             end
             
         end
+        
     end
 end
 
